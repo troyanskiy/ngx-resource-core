@@ -1,0 +1,24 @@
+{
+  "name": "rest-core",
+  "version": "0.0.1",
+  "description": "Core of resource library",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rimraf dist",
+    "lint": "tslint --config tslint.json --project tsconfig.json --type-check --format stylish",
+    "build": "tsc",
+    "webpack": "webpack",
+    "build.full": "./build.sh"
+  },
+  "author": "Roman Rosluk <roma@redbox.by>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^8.0.34",
+    "awesome-typescript-loader": "^3.2.3",
+    "clean-webpack-plugin": "^0.1.17",
+    "rimraf": "^2.6.2",
+    "tslint": "^5.7.0",
+    "typescript": "^2.5.3",
+    "webpack": "^3.7.1"
+  }
+}

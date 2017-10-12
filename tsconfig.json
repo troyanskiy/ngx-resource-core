@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "module": "es2015",
+    "target": "es5",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "declaration": true,
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "types": ["node"],
+    "lib": ["es2015", "dom"],
+    "outDir": "dist"
+  },
+  "files": [
+    "index.ts",
+    "rest-core.ts",
+    "src/Declarations.ts",
+    "src/Rest.ts",
+    "src/RestAction.ts",
+    "src/RestGlobalConfig.ts",
+    "src/RestHandler.ts",
+    "src/RestHelper.ts",
+    "src/RestParams.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "bundles"
+  ],
+  "angularCompilerOptions": {
+    "strictMetadataEmit": true,
+    "skipTemplateCodegen": true
+  }
+}
