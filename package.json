@@ -1,6 +1,6 @@
 {
   "name": "rest-core",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Core of resource library",
   "scripts": {
     "clean": "rimraf dist",
@@ -26,7 +26,7 @@
     "type": "git",
     "url": "git+https://github.com/troyanskiy/rest-core.git"
   },
-  "main": "bundles/core.umd.js",
+  "main": "bundles/rest-core.umd.js",
   "module": "index.js",
   "typings": "index.d.ts",
   "author": "Roman Rosluk <roma@redbox.by>",
