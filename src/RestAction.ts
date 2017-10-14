@@ -1,7 +1,5 @@
 import { Rest } from './Rest';
 import { IRestAction, RestRequestMethod } from './Declarations';
-import { RestHelper } from './RestHelper';
-import { RestGlobalConfig } from './RestGlobalConfig';
 
 
 export function RestAction(methodOptions?: IRestAction) {
@@ -46,13 +44,6 @@ export function RestAction(methodOptions?: IRestAction) {
       //tslint:disable-next-line:no-invalid-this
       const actionOptions: IRestAction = {...this.getRestOptions(), ...methodOptions};
 
-      if (RestHelper.isNullOrUndefined(actionOptions.removeTrailingSlash)) {
-        if (RestHelper.isNullOrUndefined(RestGlobalConfig.removeTrailingSlash)) {
-          actionOptions.removeTrailingSlash = true;
-        } else {
-          actionOptions.removeTrailingSlash = RestGlobalConfig.removeTrailingSlash;
-        }
-      }
 
       //tslint:disable-next-line:no-invalid-this
       return this.$restAction({actionAttributes: {body, query, params, onSuccess, onError}, actionOptions});

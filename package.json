@@ -1,17 +1,39 @@
 {
   "name": "rest-core",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "description": "Core of resource library",
-  "main": "index.js",
   "scripts": {
     "clean": "rimraf dist",
     "lint": "tslint --config tslint.json --project tsconfig.json --type-check --format stylish",
-    "build": "tsc",
+    "tsc": "tsc",
     "webpack": "webpack",
-    "build.full": "./build.sh"
+    "build": "npm run clean && npm run lint && npm run tsc && npm run webpack",
+    "build.full": "npm run build && cp package.json dist/package.json && cp README.md dist/README.md"
   },
+  "keywords": [
+    "rest",
+    "rest-core",
+    "ngx-resource",
+    "ngx-resource-rest",
+    "ng2-resource",
+    "ng2-resource-rest",
+    "ng2",
+    "ng2-rest",
+    "Angular2",
+    "Resource"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/troyanskiy/rest-core.git"
+  },
+  "main": "bundles/core.umd.js",
+  "module": "index.js",
+  "typings": "index.d.ts",
   "author": "Roman Rosluk <roma@redbox.by>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/troyanskiy/rest-core/issues"
+  },
   "devDependencies": {
     "@types/node": "^8.0.34",
     "awesome-typescript-loader": "^3.2.3",

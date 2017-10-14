@@ -26,7 +26,7 @@ module.exports = {
         path: helpers.root('dist/bundles'),
         publicPath: '/',
         filename: 'core.umd.js',
-        library: 'ngx-translate-core',
+        library: 'rest-core',
         libraryTarget: 'umd'
     },
 

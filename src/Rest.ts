@@ -79,55 +79,166 @@ export class Rest {
     this.$query = query;
   }
 
-  $filter(data: any): boolean {
+  $filter(data: any, options: IRestActionInner): boolean {
     return true;
   }
 
-  $map(data: any): any {
+  $map(data: any, options: IRestActionInner): any {
     return data;
+  }
+
+  $resultFactory(data: any, options: IRestActionInner): any {
+    return data || {};
   }
 
   $restAction(options: IRestActionInner) {
 
     this.$_setRestActionInnerDefaults(options);
 
+    const actionOptions = options.actionOptions;
+
+    if (!actionOptions.asPromise || actionOptions.mutateBody) {
+
+      if (actionOptions.expectJsonArray) {
+        options.returnData = [];
+      } else {
+        options.returnData = actionOptions.mutateBody ?
+          options.actionAttributes.body :
+          actionOptions.resultFactory.call(this, null, options);
+      }
+
+
+      if (this.$_canSetInternalData(options)) {
+
+        Object.defineProperty(options.returnData, '$resolved', {
+          enumerable: false,
+          configurable: true,
+          writable: true,
+          value: false
+        });
+
+        Object.defineProperty(options.returnData, '$abort', {
+          enumerable: false,
+          configurable: true,
+          writable: true,
+          value: () => {
+            // does nothing for now
+          }
+        });
+
+      }
+
+    }
+
     const mainPromise = this.$_setResolvedOptions(options)
       .then((o: IRestActionInner) => this.$_createRequestOptions(o))
-      .then((o: IRestActionInner) => this.requestHandler.handle(o.requestOptions))
-      .then((resp: IRestResponse) => this.handleSuccessResponse(options, resp))
-      .catch((resp: IRestResponse) => this.handleErrorResponse(options, resp));
+      .then((o: IRestActionInner) => {
+        const handlerResp = this.requestHandler.handle(o.requestOptions);
 
-    return mainPromise;
+        if (o.returnData && this.$_canSetInternalData(options)) {
+          o.returnData.$abort = handlerResp.abort;
+        }
+
+        return handlerResp.promise;
+      })
+      .then((resp: IRestResponse) => this.$handleSuccessResponse(options, resp))
+      .catch((resp: IRestResponse) => this.$handleErrorResponse(options, resp));
+
+
+
+    if (actionOptions.asPromise) {
+
+      return mainPromise;
+
+    } else {
+
+      if (this.$_canSetInternalData(options)) {
+
+        Object.defineProperty(options.returnData, '$promise', {
+          enumerable: false,
+          configurable: true,
+          writable: true,
+          value: mainPromise
+        });
+
+      }
+
+      return options.returnData;
+
+    }
+
 
   }
 
-  protected handleSuccessResponse(options: IRestActionInner, resp: IRestResponse): any {
+  protected $handleSuccessResponse(options: IRestActionInner, resp: IRestResponse): any {
 
     let body = resp.body;
+
+    const actionOptions = options.actionOptions;
+
+    if (Array.isArray(body)) {
+
+      body = body
+        .filter((item: any) => actionOptions.filter.call(this, item, options))
+        .map((item: any) => {
+          item = actionOptions.map.call(this, item, options);
+
+          return actionOptions.resultFactory.call(this, item, options);
+        });
+
+      if (options.returnData) {
+        Array.prototype.push.apply(options.returnData, body);
+        body = options.returnData;
+      }
+
+    } else {
+
+      if (actionOptions.filter.call(this, body, options)) {
+
+        body = actionOptions.map.call(this, body, options);
+
+        let newBody = options.returnData;
+
+        if (newBody) {
+          if (newBody.$setData) {
+            newBody.$setData(body);
+          } else {
+            Object.assign(newBody, body);
+          }
+        } else {
+          newBody = actionOptions.resultFactory.call(this, body, options);
+        }
+
+        body = newBody;
+
+      } else {
+
+        body = null;
+
+      }
+    }
+
+    if (options.returnData && this.$_canSetInternalData(options)) {
+      options.returnData.$resolved = true;
+    }
 
     if (options.actionAttributes.onSuccess) {
       options.actionAttributes.onSuccess(body);
     }
 
-    if (Array.isArray(body)) {
-      body = body
-        .filter((item: any) => this.$filter(item))
-        .map((item: any) => this.$map(item));
-    } else {
-      if (this.$filter(body)) {
-        body = this.$map(body);
-      } else {
-        body = null;
-      }
-    }
-
     return body;
   }
 
-  protected handleErrorResponse(options: IRestActionInner, resp: IRestResponse): any {
+  protected $handleErrorResponse(options: IRestActionInner, resp: IRestResponse): any {
+
+    if (options.returnData && this.$_canSetInternalData(options)) {
+      options.returnData.$resolved = true;
+    }
+
     if (options.actionAttributes.onError) {
       options.actionAttributes.onError(resp);
     }
+
     throw resp;
   }
 
@@ -208,7 +319,7 @@ export class Rest {
 
   protected $setRequestOptionsBody(options: IRestActionInner): void {
 
-    const body = options.actionAttributes.body;
+    let body = options.actionAttributes.body;
 
     if (!body) {
       return;
@@ -223,20 +334,28 @@ export class Rest {
       if (realBodyType === RestRequestBodyType.JSON) {
 
         switch (options.actionOptions.requestBodyType) {
+
           case RestRequestBodyType.FORM_DATA:
+
             const newBody = new FormData();
+
             Object.keys(body).forEach((key: string) => {
 
               const value = body[key];
 
-              let fileName: string;
-              if (value instanceof File) {
-                fileName = (value as File).name;
+              if (body.hasOwnProperty(key) && typeof value !== 'function') {
+                let fileName: string;
+                if (value instanceof File) {
+                  fileName = (value as File).name;
+                }
+
+                newBody.append(key, value, fileName);
               }
 
-              newBody.append(key, value, fileName);
             });
+
             bodyOk = true;
+
         }
 
       }
@@ -245,6 +364,14 @@ export class Rest {
 
     if (!bodyOk) {
       throw new Error('Can not convert body');
+    }
+
+
+    // Add root node if needed
+    if (options.actionOptions.rootNode) {
+      const newBody: any = {};
+      newBody[options.actionOptions.rootNode] = body;
+      body = newBody;
     }
 
     options.requestOptions.body = body;
@@ -263,6 +390,15 @@ export class Rest {
         }
       });
     }
+
+    if (options.actionOptions.addTimestamp) {
+      options.requestOptions.query = options.requestOptions.query || {};
+      this.$appendQueryParams(
+        options.requestOptions.query,
+        options.actionOptions.addTimestamp as string,
+        Date.now().toString(10));
+    }
+
   }
 
   protected $appendQueryParams(query: { [prop: string]: string }, key: string, value: any): void {
@@ -328,7 +464,7 @@ export class Rest {
 
   }
 
-  private $_setRestActionInnerDefaults(options: IRestActionInner) {
+  protected $_setRestActionInnerDefaults(options: IRestActionInner) {
     const actionOptions = options.actionOptions;
 
     // Setting default request method
@@ -363,9 +499,41 @@ export class Rest {
     if (!actionAttributes.query && actionOptions.method === RestRequestMethod.Get) {
       actionAttributes.query = actionAttributes.params;
     }
+
+    if (RestHelper.isNullOrUndefined(actionOptions.filter)) {
+      actionOptions.filter = this.$filter;
+    }
+
+    if (RestHelper.isNullOrUndefined(actionOptions.map)) {
+      actionOptions.map = this.$map;
+    }
+
+    if (RestHelper.isNullOrUndefined(actionOptions.resultFactory)) {
+      actionOptions.resultFactory = this.$resultFactory;
+    }
+
+    if (RestHelper.isNullOrUndefined(actionOptions.removeTrailingSlash)) {
+      actionOptions.removeTrailingSlash = RestGlobalConfig.removeTrailingSlash;
+    }
+
+    if (RestHelper.isNullOrUndefined(actionOptions.withCredentials)) {
+      actionOptions.withCredentials = RestGlobalConfig.withCredentials;
+    }
+
+    if (RestHelper.isNullOrUndefined(actionOptions.asPromise)) {
+      actionOptions.asPromise = RestGlobalConfig.asPromise;
+    }
+
+    if (RestHelper.isNullOrUndefined(actionOptions.addTimestamp)) {
+      actionOptions.addTimestamp = RestGlobalConfig.addTimestamp;
+
+      if (typeof actionOptions.addTimestamp !== 'string') {
+        actionOptions.addTimestamp = 'ts';
+      }
+    }
   }
 
-  private $_setResolvedOptions(options: IRestActionInner): Promise<IRestActionInner> {
+  protected $_setResolvedOptions(options: IRestActionInner): Promise<IRestActionInner> {
     return Promise.all([
       this.$getUrl(options.actionOptions),
       this.$getPathPrefix(options.actionOptions),
@@ -384,7 +552,7 @@ export class Rest {
       });
   }
 
-  private $_createRequestOptions(options: IRestActionInner): IRestActionInner {
+  protected $_createRequestOptions(options: IRestActionInner): IRestActionInner | Promise<IRestActionInner> {
 
     options.requestOptions = {};
 
@@ -405,5 +573,8 @@ export class Rest {
     return options;
   }
 
+  protected $_canSetInternalData(options: IRestActionInner): boolean {
+    return !options.actionOptions.lean;
+  }
 
 }

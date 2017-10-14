@@ -1,5 +1,5 @@
-import { IRestRequest, IRestResponse } from './Declarations';
+import { IRestHandlerResponse, IRestRequest } from './Declarations';
 
 export abstract class RestHandler {
-  abstract handle(req: IRestRequest): Promise<IRestResponse>;
+  abstract handle(req: IRestRequest): IRestHandlerResponse;
 }

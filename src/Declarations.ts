@@ -10,39 +10,42 @@ export interface IRestParamsBase {
 }
 
 export interface IRestParams extends IRestParamsBase {
+  rootNode?: string;
   removeTrailingSlash?: boolean;
-  // addTimestamp?: boolean | string;
+  addTimestamp?: boolean | string;
   withCredentials?: boolean;
-  // lean?: boolean;
-  // toPromise?: boolean;
+  lean?: boolean;
+  mutateBody?: boolean;
+  asPromise?: boolean;
   requestBodyType?: RestRequestBodyType;
-  // toObservable?: boolean;
-  // bodySerializer?(body: any): string;
   responseBodyType?: RestResponseBodyType;
 }
 
 
 export interface IRestAction extends IRestParams {
   method?: RestRequestMethod; // get default
-  // isArray?: boolean;
+  expectJsonArray?: boolean;
   // requestInterceptor?: IRestRequestInterceptor;
   // responseInterceptor?: IRestResponseInterceptor;
-  // initResultObject?: IRestResponseInitResult;
+  resultFactory?: IRestResultFactory;
   map?: IRestResponseMap;
   filter?: IRestResponseFilter;
   // model?: Type<RestModel<Rest>>;
   // useModel?: boolean;
-  // rootNode?: string;
   // skipDataCleaning?: boolean;
 }
 
 
 export interface IRestResponseMap {
-  (item: any): any;
+  (item: any, options: IRestActionInner): any;
 }
 
 export interface IRestResponseFilter {
-  (item: any): boolean;
+  (item: any, options: IRestActionInner): boolean;
+}
+
+export interface IRestResultFactory {
+  (item: any, options: IRestActionInner): any;
 }
 
 export interface IRestActionAttributes {
@@ -59,6 +62,8 @@ export interface IRestActionInner {
   resolvedOptions?: IRestParamsBase;
 
   requestOptions?: IRestRequest;
+
+  returnData?: any;
 }
 
 export interface IRestRequest {
@@ -68,6 +73,12 @@ export interface IRestRequest {
   withCredentials?: boolean;
   body?: any;
   query?: {[prop: string]: string};
+  responseBodyType?: RestResponseBodyType;
+}
+
+export interface IRestHandlerResponse {
+  promise: Promise<IRestResponse>;
+  abort?(): void;
 }
 
 export interface IRestResponse {
