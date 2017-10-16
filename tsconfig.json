@@ -21,6 +21,7 @@
     "src/RestGlobalConfig.ts",
     "src/RestHandler.ts",
     "src/RestHelper.ts",
+    "src/RestModel.ts",
     "src/RestParams.ts"
   ],
   "exclude": [

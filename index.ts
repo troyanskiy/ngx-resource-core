@@ -4,4 +4,5 @@ export * from './src/RestAction';
 export * from './src/RestGlobalConfig';
 export * from './src/RestHandler';
 export * from './src/RestHelper';
+export * from './src/RestModel';
 export * from './src/RestParams';

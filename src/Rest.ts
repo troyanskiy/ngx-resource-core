@@ -12,6 +12,8 @@ import { RestHandler } from './RestHandler';
 
 export class Rest {
 
+  static instance: Rest = null;
+
   private $url: string = null;
   private $pathPrefix: string = null;
   private $path: string = null;
@@ -21,9 +23,10 @@ export class Rest {
   private $query: any = null;
 
   constructor(protected requestHandler: RestHandler) {
+    (this.constructor as any).instance = this;
   }
 
-  $getUrl(actionOptions: IRestAction): string | Promise<string> {
+  $getUrl(actionOptions: IRestAction = {}): string | Promise<string> {
     return this.$url || actionOptions.url || RestGlobalConfig.url || '';
   }
 
@@ -31,7 +34,7 @@ export class Rest {
     this.$url = url;
   }
 
-  $getPathPrefix(actionOptions: IRestAction): string | Promise<string> {
+  $getPathPrefix(actionOptions: IRestAction = {}): string | Promise<string> {
     return this.$pathPrefix || actionOptions.pathPrefix || RestGlobalConfig.pathPrefix || '';
   }
 
@@ -39,7 +42,7 @@ export class Rest {
     this.$pathPrefix = path;
   }
 
-  $getPath(actionOptions: IRestAction): string | Promise<string> {
+  $getPath(actionOptions: IRestAction = {}): string | Promise<string> {
     return this.$path || actionOptions.path || RestGlobalConfig.path || '';
   }
 
@@ -47,7 +50,7 @@ export class Rest {
     this.$path = path;
   }
 
-  $getHeaders(actionOptions: IRestAction): any | Promise<any> {
+  $getHeaders(actionOptions: IRestAction = {}): any | Promise<any> {
     return this.$headers || actionOptions.headers || RestGlobalConfig.headers || {};
   }
 
@@ -55,7 +58,7 @@ export class Rest {
     this.$headers = headers;
   }
 
-  $getBody(actionOptions: IRestAction): any | Promise<any> {
+  $getBody(actionOptions: IRestAction = {}): any | Promise<any> {
     return this.$body || actionOptions.body || RestGlobalConfig.body || {};
   }
 
@@ -63,7 +66,7 @@ export class Rest {
     this.$body = body;
   }
 
-  $getParams(actionOptions: IRestAction): any | Promise<any> {
+  $getParams(actionOptions: IRestAction = {}): any | Promise<any> {
     return this.$params || actionOptions.params || RestGlobalConfig.params || {};
   }
 
@@ -71,7 +74,7 @@ export class Rest {
     this.$params = params;
   }
 
-  $getQuery(actionOptions: IRestAction): any | Promise<any> {
+  $getQuery(actionOptions: IRestAction = {}): any | Promise<any> {
     return this.$query || actionOptions.query || RestGlobalConfig.query || {};
   }
 
@@ -79,21 +82,22 @@ export class Rest {
     this.$query = query;
   }
 
-  $filter(data: any, options: IRestActionInner): boolean {
+  $filter(data: any, options: IRestActionInner = {}): boolean {
     return true;
   }
 
-  $map(data: any, options: IRestActionInner): any {
+  $map(data: any, options: IRestActionInner = {}): any {
     return data;
   }
 
-  $resultFactory(data: any, options: IRestActionInner): any {
+  $resultFactory(data: any, options: IRestActionInner = {}): any {
     return data || {};
   }
 
   $restAction(options: IRestActionInner) {
 
     this.$_setRestActionInnerDefaults(options);
+    this.$_setRestActionOptionDefaults(options);
 
     const actionOptions = options.actionOptions;
 
@@ -254,6 +258,8 @@ export class Rest {
     }
 
 
+    options.usedInPath = {};
+
     const params = RestHelper.defaults(options.actionAttributes.params, options.resolvedOptions.params);
     const pathParams = ro.url.match(/{([^}]*)}/g) || [];
 
@@ -270,6 +276,10 @@ export class Rest {
       const onlyPathParam = pathKey[0] === ':';
       if (onlyPathParam) {
         pathKey = pathKey.substr(1);
+      }
+
+      if (options.actionAttributes.query && options.actionAttributes.query === options.actionAttributes.params) {
+        options.usedInPath[pathKey] = true;
       }
 
       const value = params[pathKey];
@@ -385,7 +395,7 @@ export class Rest {
     if (oq) {
       options.requestOptions.query = {};
       Object.keys(oq).forEach((key: string) => {
-        if (oq.hasOwnProperty(key)) {
+        if (oq.hasOwnProperty(key) && !options.usedInPath[key]) {
           this.$appendQueryParams(options.requestOptions.query, key, oq[key]);
         }
       });
@@ -500,6 +510,12 @@ export class Rest {
       actionAttributes.query = actionAttributes.params;
     }
 
+  }
+
+  protected $_setRestActionOptionDefaults(options: IRestActionInner) {
+
+    const actionOptions = options.actionOptions;
+
     if (RestHelper.isNullOrUndefined(actionOptions.filter)) {
       actionOptions.filter = this.$filter;
     }
@@ -524,10 +540,14 @@ export class Rest {
       actionOptions.asPromise = RestGlobalConfig.asPromise;
     }
 
+    if (RestHelper.isNullOrUndefined(actionOptions.responseBodyType)) {
+      actionOptions.responseBodyType = RestGlobalConfig.responseBodyType;
+    }
+
     if (RestHelper.isNullOrUndefined(actionOptions.addTimestamp)) {
       actionOptions.addTimestamp = RestGlobalConfig.addTimestamp;
 
-      if (typeof actionOptions.addTimestamp !== 'string') {
+      if (actionOptions.addTimestamp && typeof actionOptions.addTimestamp !== 'string') {
         actionOptions.addTimestamp = 'ts';
       }
     }
@@ -558,8 +578,9 @@ export class Rest {
 
     // Step 1 set main
     options.requestOptions.method = options.actionOptions.method;
-    options.requestOptions.headers = options.actionOptions.headers;
+    options.requestOptions.headers = options.resolvedOptions.headers;
     options.requestOptions.withCredentials = options.actionOptions.withCredentials;
+    options.requestOptions.responseBodyType = options.actionOptions.responseBodyType;
 
     // Step 2 create url
     this.$setRequestOptionsUrl(options);

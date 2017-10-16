@@ -19,8 +19,8 @@ export interface IRestParams extends IRestParamsBase {
   asPromise?: boolean;
   requestBodyType?: RestRequestBodyType;
   responseBodyType?: RestResponseBodyType;
+  [prop: string]: any;
 }
-
 
 export interface IRestAction extends IRestParams {
   method?: RestRequestMethod; // get default
@@ -34,7 +34,6 @@ export interface IRestAction extends IRestParams {
   // useModel?: boolean;
   // skipDataCleaning?: boolean;
 }
-
 
 export interface IRestResponseMap {
   (item: any, options: IRestActionInner): any;
@@ -61,6 +60,8 @@ export interface IRestActionInner {
   actionOptions?: IRestAction;
   resolvedOptions?: IRestParamsBase;
 
+  usedInPath?: {[key: string]: boolean};
+
   requestOptions?: IRestRequest;
 
   returnData?: any;
@@ -86,6 +87,31 @@ export interface IRestResponse {
   headers?: any;
   body?: any;
 }
+
+export interface IRestMethodStrict<IB, IQ, IP, O> {
+  (body: IB, query: IQ, params: IP, onSuccess?: (data: O) => any, onError?: (err: IRestResponse) => any): Promise<O>;
+  (body: IB, query: IQ, onSuccess?: (data: O) => any, onError?: (err: IRestResponse) => any): Promise<O>;
+  (body: IB, onSuccess?: (data: O) => any, onError?: (err: IRestResponse) => any): Promise<O>;
+  (onSuccess?: (data: O) => any, onError?: (err: IRestResponse) => any): Promise<O>;
+}
+
+export interface IRestMethodResultStrict<IB, IQ, IP, O> {
+  (body: IB, query: IQ, params: IP, onSuccess?: (data: RestResult<O>) => any, onError?: (err: IRestResponse) => any): RestResult<O>;
+  (body: IB, query: IQ, onSuccess?: (data: RestResult<O>) => any, onError?: (err: IRestResponse) => any): RestResult<O>;
+  (body: IB, onSuccess?: (data: RestResult<O>) => any, onError?: (err: IRestResponse) => any): RestResult<O>;
+  (onSuccess?: (data: RestResult<O>) => any, onError?: (err: IRestResponse) => any): RestResult<O>;
+}
+
+export interface IRestMethodResult<IB, O> extends IRestMethodResultStrict<IB, any, any, O> {}
+
+export interface IRestMethod<IB, O> extends IRestMethodStrict<IB, any, any, O> {}
+
+
+export type RestResult<R extends {}> = R & {
+  $resolved?: boolean;
+  $promise?: Promise<R>;
+  $abort?(): void;
+};
 
 
 export enum RestRequestBodyType {

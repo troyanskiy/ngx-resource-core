@@ -1,4 +1,4 @@
-import { RestGetParamsMappingType } from './Declarations';
+import { RestGetParamsMappingType, RestResponseBodyType } from './Declarations';
 
 export class RestGlobalConfig {
   static url: string | Promise<string> = null;
@@ -18,6 +18,7 @@ export class RestGlobalConfig {
   // static lean: boolean = null;
   static asPromise: boolean = true;
   // static toObservable: boolean = null;
+  static responseBodyType: RestResponseBodyType = RestResponseBodyType.Json;
 
 
   static getParamsMappingType: RestGetParamsMappingType = null;
