@@ -55,7 +55,7 @@ export abstract class RestModel {
     const restInstance = this.$rest.constructor.instance;
 
     if (!restInstance) {
-      console.error(`Your Rest is not defined in not created`);
+      console.error(`Your Rest is not defined or not created`);
 
       return this;
     }

@@ -61,6 +61,8 @@ export interface IRestActionInner {
   resolvedOptions?: IRestParamsBase;
 
   usedInPath?: {[key: string]: boolean};
+  mainPromise?: Promise<any>;
+  isModel?: boolean;
 
   requestOptions?: IRestRequest;
 

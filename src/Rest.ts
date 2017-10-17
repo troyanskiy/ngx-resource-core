@@ -101,40 +101,35 @@ export class Rest {
 
     const actionOptions = options.actionOptions;
 
-    if (!actionOptions.asPromise || actionOptions.mutateBody) {
+    if (actionOptions.mutateBody || options.isModel) {
+      options.returnData = options.actionAttributes.body;
+    }
 
-      if (actionOptions.expectJsonArray) {
-        options.returnData = [];
-      } else {
-        options.returnData = actionOptions.mutateBody ?
-          options.actionAttributes.body :
-          actionOptions.resultFactory.call(this, null, options);
-      }
+    if (!actionOptions.asPromise) {
+      options.returnData = actionOptions.expectJsonArray ? [] : actionOptions.resultFactory.call(this, null, options);
+    }
 
+    if (this.$_canSetInternalData(options)) {
 
-      if (this.$_canSetInternalData(options)) {
+      Object.defineProperty(options.returnData, '$resolved', {
+        enumerable: false,
+        configurable: true,
+        writable: true,
+        value: false
+      });
 
-        Object.defineProperty(options.returnData, '$resolved', {
-          enumerable: false,
-          configurable: true,
-          writable: true,
-          value: false
-        });
-
-        Object.defineProperty(options.returnData, '$abort', {
-          enumerable: false,
-          configurable: true,
-          writable: true,
-          value: () => {
-            // does nothing for now
-          }
-        });
-
-      }
+      Object.defineProperty(options.returnData, '$abort', {
+        enumerable: false,
+        configurable: true,
+        writable: true,
+        value: () => {
+          // does nothing for now
+        }
+      });
 
     }
 
-    const mainPromise = this.$_setResolvedOptions(options)
+    options.mainPromise = this.$_setResolvedOptions(options)
       .then((o: IRestActionInner) => this.$_createRequestOptions(o))
       .then((o: IRestActionInner) => {
         const handlerResp = this.requestHandler.handle(o.requestOptions);
@@ -149,28 +144,18 @@ export class Rest {
       .catch((resp: IRestResponse) => this.$handleErrorResponse(options, resp));
 
 
+    if (this.$_canSetInternalData(options)) {
 
-    if (actionOptions.asPromise) {
-
-      return mainPromise;
-
-    } else {
-
-      if (this.$_canSetInternalData(options)) {
-
-        Object.defineProperty(options.returnData, '$promise', {
-          enumerable: false,
-          configurable: true,
-          writable: true,
-          value: mainPromise
-        });
-
-      }
-
-      return options.returnData;
+      Object.defineProperty(options.returnData, '$promise', {
+        enumerable: false,
+        configurable: true,
+        writable: true,
+        value: options.mainPromise
+      });
 
     }
 
+    return actionOptions.asPromise ? options.mainPromise : options.returnData;
 
   }
 
@@ -204,7 +189,7 @@ export class Rest {
         let newBody = options.returnData;
 
         if (newBody) {
-          if (newBody.$setData) {
+          if (typeof newBody.$setData === 'function') {
             newBody.$setData(body);
           } else {
             Object.assign(newBody, body);
@@ -222,7 +207,7 @@ export class Rest {
       }
     }
 
-    if (options.returnData && this.$_canSetInternalData(options)) {
+    if (this.$_canSetInternalData(options)) {
       options.returnData.$resolved = true;
     }
 
@@ -500,6 +485,8 @@ export class Rest {
           actionAttributes.params = actionAttributes.body;
         }
 
+        options.isModel = !!actionAttributes.body.$rest;
+
       }
 
     }
@@ -509,6 +496,8 @@ export class Rest {
     if (!actionAttributes.query && actionOptions.method === RestRequestMethod.Get) {
       actionAttributes.query = actionAttributes.params;
     }
+
+
 
   }
 
@@ -542,6 +531,14 @@ export class Rest {
 
     if (RestHelper.isNullOrUndefined(actionOptions.responseBodyType)) {
       actionOptions.responseBodyType = RestGlobalConfig.responseBodyType;
+    }
+
+    if (RestHelper.isNullOrUndefined(actionOptions.lean)) {
+      actionOptions.lean = RestGlobalConfig.lean;
+
+      if (actionOptions.mutateBody && !actionOptions.asPromise && RestHelper.isNullOrUndefined(actionOptions.lean)) {
+        actionOptions.lean = true;
+      }
     }
 
     if (RestHelper.isNullOrUndefined(actionOptions.addTimestamp)) {
@@ -595,7 +592,7 @@ export class Rest {
   }
 
   protected $_canSetInternalData(options: IRestActionInner): boolean {
-    return !options.actionOptions.lean;
+    return options.returnData && (!options.actionOptions.lean || options.isModel);
   }
 
 }

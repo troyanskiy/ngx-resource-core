@@ -6,7 +6,7 @@ export class RestHelper {
     '$resolved',
     '$promise',
     '$abort',
-    '$resource'
+    '$rest'
   ];
 
   static getRealTypeOf(data: any): RestRequestBodyType {

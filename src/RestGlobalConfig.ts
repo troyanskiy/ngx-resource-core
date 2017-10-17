@@ -4,10 +4,7 @@ export class RestGlobalConfig {
   static url: string | Promise<string> = null;
   static pathPrefix: string | Promise<string> = null;
   static path: string | Promise<string> = null;
-  static headers: any | Promise<any> = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  };
+  static headers: any | Promise<any> = null;
   static body: any | Promise<any> = null;
   static params: any | Promise<any> = null;
   static query: any | Promise<any> = null;
@@ -15,7 +12,7 @@ export class RestGlobalConfig {
   static removeTrailingSlash: boolean = true;
   static addTimestamp: boolean | string = false;
   static withCredentials: boolean = false;
-  // static lean: boolean = null;
+  static lean: boolean = null;
   static asPromise: boolean = true;
   // static toObservable: boolean = null;
   static responseBodyType: RestResponseBodyType = RestResponseBodyType.Json;
