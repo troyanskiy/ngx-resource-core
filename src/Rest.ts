@@ -12,8 +12,6 @@ import { RestHandler } from './RestHandler';
 
 export class Rest {
 
-  static instance: Rest = null;
-
   private $url: string = null;
   private $pathPrefix: string = null;
   private $path: string = null;
@@ -23,6 +21,7 @@ export class Rest {
   private $query: any = null;
 
   constructor(protected requestHandler: RestHandler) {
+    console.log('Rest', this.constructor, this);
     (this.constructor as any).instance = this;
   }
 
@@ -199,6 +198,13 @@ export class Rest {
         }
 
         body = newBody;
+
+        // If it's model
+        if (body.$rest) {
+          body.$resolved = true;
+          body.$promise = options.mainPromise;
+          body.$abort = () => true;
+        }
 
       } else {
 

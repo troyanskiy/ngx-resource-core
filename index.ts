@@ -6,3 +6,4 @@ export * from './src/RestHandler';
 export * from './src/RestHelper';
 export * from './src/RestModel';
 export * from './src/RestParams';
+export * from './src/RestCommon/RestCRUD';

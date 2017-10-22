@@ -4,8 +4,8 @@ export abstract class RestModel {
 
   abstract readonly $rest: any = null;
 
-  $resolved: boolean;
-  $promise: Promise<any>;
+  $resolved: boolean = true;
+  $promise: Promise<any> = null;
   $abort: () => void;
 
   public $setData(data: any) {
@@ -52,7 +52,7 @@ export abstract class RestModel {
       return this;
     }
 
-    const restInstance = this.$rest.constructor.instance;
+    const restInstance = this.$rest.instance;
 
     if (!restInstance) {
       console.error(`Your Rest is not defined or not created`);

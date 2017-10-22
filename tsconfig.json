@@ -22,7 +22,8 @@
     "src/RestHandler.ts",
     "src/RestHelper.ts",
     "src/RestModel.ts",
-    "src/RestParams.ts"
+    "src/RestParams.ts",
+    "src/RestCommon/RestCRUD.ts"
   ],
   "exclude": [
     "node_modules",
