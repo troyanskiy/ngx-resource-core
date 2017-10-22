@@ -124,3 +124,6 @@ List of params (is all above) plus following:
 * `map?: IRestResponseMap;` - custom data mapping method. *Default: `returns without any changes`*
 * `filter?: IRestResponseFilter;` - custom data filtering method. *Default: `returns true`*
 
+### [RestGlobalConfig](https://github.com/troyanskiy/rest-core/blob/master/src/RestGlobalConfig.ts)
+Mainly used to set defaults
+
