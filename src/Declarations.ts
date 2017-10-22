@@ -72,6 +72,7 @@ export interface IRestRequest {
   body?: any;
   query?: {[prop: string]: string};
   responseBodyType?: RestResponseBodyType;
+  requestBodyType?: RestRequestBodyType;
 }
 
 export interface IRestHandlerResponse {

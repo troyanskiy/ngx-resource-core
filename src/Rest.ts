@@ -649,6 +649,7 @@ export class Rest {
     options.requestOptions.headers = options.resolvedOptions.headers;
     options.requestOptions.withCredentials = options.actionOptions.withCredentials;
     options.requestOptions.responseBodyType = options.actionOptions.responseBodyType;
+    options.requestOptions.requestBodyType = options.actionOptions.requestBodyType;
 
     // Step 2 create url
     this.$setRequestOptionsUrl(options);
