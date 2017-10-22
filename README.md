@@ -55,7 +55,7 @@ export class UserRest extends Rest {
   @RestAction({
     method: RestRequestMethod.Post
   })
-  createUser: IRestMethod<IUser, IUser>;
+  createUser: IRestMethodStrict<IUser, IUserQuery, IUserPathParams, IUser>;
   
   constructor(restHandler: RestHandler) {
     super(restHandler);
@@ -127,3 +127,7 @@ List of params (is all above) plus following:
 ### [RestGlobalConfig](https://github.com/troyanskiy/rest-core/blob/master/src/RestGlobalConfig.ts)
 Mainly used to set defaults
 
+
+## Developing Rest Handler
+
+Use [`RestHandler`](https://github.com/troyanskiy/rest-core/blob/master/src/RestHandler.ts) abstract class as parent to create your Handler. I think it's clear what should it do by checking sources of the class.
