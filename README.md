@@ -128,6 +128,132 @@ List of params (is all above) plus following:
 Mainly used to set defaults
 
 
+## Models
+What is that. It's an object which has build in methods to save, update, delete an model.
+Here is an example of `User` model.
+
+```typescript
+
+export interface IPaginationQuery {
+  page?: number;
+  perPage?: number;
+}
+
+export interface IGroupQuery extends IPaginationQuery {
+  title?: string;
+}
+
+export interface IUserQuery extends IPaginationQuery {
+  firstName?: string;
+  lastName?: string;
+  groupId?: number;
+}
+
+export interface IUser {
+  id: number;
+  userName: string;
+  firstName: string;
+  lastName: string;
+  groupId: string;
+}
+
+export class GroupRest extends RestCRUD<IGroupQuery, Group, Group> {
+  
+  constructor(restHandler: RestHandler) {}
+  
+  $resultFactory(data: any, options: IRestActionInner = {}): any {
+    return new Group(data);
+  }
+  
+}
+
+export class Group extends RestModel {
+  
+  readonly $rest = GroupRest;
+
+  id: number;
+  title: string;
+  
+  constructor(data?: IGroup) {
+    if (data) {
+      this.$setData(data);
+    }
+  }
+  
+  $setData(data: IGroup) {
+    this.id = data.id;
+    this.title = data.title;
+  }
+  
+}
+
+export class UserRest extends RestCRUD<IUserQuery, User, User> {
+  
+  constructor(restHandler: RestHandler) {}
+  
+  $resultFactory(data: any, options: IRestActionInner = {}): any {
+    return new User(data);
+  }
+  
+}
+
+export class User extends RestModel implements IUser {
+
+  readonly $rest = UserRest;
+
+  id: number;
+  userName: string;
+  firstName: string;
+  lastName: string;
+  groupId: string;
+  
+  fullName: string; // generated from first name and last name
+  
+  constructor(data?: IUser) {
+    if (data) {
+      this.$setData(data);
+    }
+  }
+  
+  $setData(data: IUser) {
+    Object.assign(data);
+    this.fullName = `${this.firstName} ${this.lastName}`;
+  }
+  
+  toJSON() {
+    // here i'm using lodash lib pick method.
+    return _.pick(this, ['id', 'firstName', 'lastName', 'groupId']);
+  }
+
+}
+
+
+// example of using the staff
+async someMethodToCreateGroupAndUser() {
+
+  // Creation a group
+  const group = new Group();
+  group.title = 'My group';
+  
+  // Saving the group
+  await group.$save();
+  
+  // Creating an user
+  const user = new User({
+    userName: 'troyanskiy',
+    firstName: 'firstName',
+    lastName: 'lastName',
+    groupId: group.id
+  });
+  
+  // Saving the user
+  await user.$save();
+  
+}
+
+```
+
+
 ## Developing Rest Handler
 
 Use [`RestHandler`](https://github.com/troyanskiy/rest-core/blob/master/src/RestHandler.ts) abstract class as parent to create your Handler. I think it's clear what should it do by checking sources of the class.
