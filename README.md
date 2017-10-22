@@ -4,11 +4,15 @@
 
 # rest-core
 Rest Core is an evolution of ngx-resource lib which provides freedom for the developers. Each developer can implement his own request handlers.
-In fact, `rest-core` is an abstract common library which uses abstract `RestHandler` to make an requests, so it's even possible to use the lib on node.js server side with typescript. Just need to implement `RestHandler` for it.
+In fact, `rest-core` is an abstract common library which uses `RestHandler` to make an requests, so it's even possible to use the lib on node.js server side with typescript. Just need to implement `RestHandler` for it.
 
 All my examples will be based on angalar 4.4.4+
 
-For angular, I have implemented `rest-ngx` library, which includes `module` and `handler`.
+### Known `RestHandlers`
+* `rest-ngx`. Based on `HttpClient` from Angular. Includes `RestModule.forRoot`. [GitHub](https://github.com/troyanskiy/rest-ngx)
+* `rest-cordova-advanced-http`. Based on [Cordova Plugin Advanced HTTP](`https://github.com/silkimen/cordova-plugin-advanced-http`). [GitHub](https://github.com/troyanskiy/rest-cordova-advanced-http)
+* `rest-fetch`. Besed on [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API). Not yet created.
+
 
 ## Creation of rest class
 
