@@ -21,10 +21,15 @@ export class Rest {
   private $query: any = null;
 
   constructor(protected requestHandler: RestHandler) {
-    console.log('Rest', this.constructor, this);
     (this.constructor as any).instance = this;
   }
 
+  /**
+   * Used to get url
+   *
+   * @param {IRestAction} actionOptions
+   * @return {string | Promise<string>}
+   */
   $getUrl(actionOptions: IRestAction = {}): string | Promise<string> {
     return this.$url || actionOptions.url || RestGlobalConfig.url || '';
   }
@@ -33,6 +38,12 @@ export class Rest {
     this.$url = url;
   }
 
+  /**
+   * Used to get path prefix
+   *
+   * @param {IRestAction} actionOptions
+   * @return {string | Promise<string>}
+   */
   $getPathPrefix(actionOptions: IRestAction = {}): string | Promise<string> {
     return this.$pathPrefix || actionOptions.pathPrefix || RestGlobalConfig.pathPrefix || '';
   }
@@ -41,6 +52,12 @@ export class Rest {
     this.$pathPrefix = path;
   }
 
+  /**
+   * Used to get path
+   *
+   * @param {IRestAction} actionOptions
+   * @return {string | Promise<string>}
+   */
   $getPath(actionOptions: IRestAction = {}): string | Promise<string> {
     return this.$path || actionOptions.path || RestGlobalConfig.path || '';
   }
@@ -49,6 +66,12 @@ export class Rest {
     this.$path = path;
   }
 
+  /**
+   * Get headers.
+   *
+   * @param {IRestAction} actionOptions
+   * @return {any | Promise<any>}
+   */
   $getHeaders(actionOptions: IRestAction = {}): any | Promise<any> {
     return this.$headers || actionOptions.headers || RestGlobalConfig.headers || {};
   }
@@ -57,6 +80,12 @@ export class Rest {
     this.$headers = headers;
   }
 
+  /**
+   * Get body
+   *
+   * @param {IRestAction} actionOptions
+   * @return {any | Promise<any>}
+   */
   $getBody(actionOptions: IRestAction = {}): any | Promise<any> {
     return this.$body || actionOptions.body || RestGlobalConfig.body || {};
   }
@@ -65,6 +94,12 @@ export class Rest {
     this.$body = body;
   }
 
+  /**
+   * Get path params
+   *
+   * @param {IRestAction} actionOptions
+   * @return {any | Promise<any>}
+   */
   $getParams(actionOptions: IRestAction = {}): any | Promise<any> {
     return this.$params || actionOptions.params || RestGlobalConfig.params || {};
   }
@@ -73,6 +108,12 @@ export class Rest {
     this.$params = params;
   }
 
+  /**
+   * Get query params
+   *
+   * @param {IRestAction} actionOptions
+   * @return {any | Promise<any>}
+   */
   $getQuery(actionOptions: IRestAction = {}): any | Promise<any> {
     return this.$query || actionOptions.query || RestGlobalConfig.query || {};
   }
@@ -81,14 +122,38 @@ export class Rest {
     this.$query = query;
   }
 
+  /**
+   * Used to filter received data.
+   * Is applied on each element of array or object
+   *
+   * @param data
+   * @param {IRestActionInner} options
+   * @return {boolean}
+   */
   $filter(data: any, options: IRestActionInner = {}): boolean {
     return true;
   }
 
+  /**
+   * Used to map received data
+   * Is applied on each element of array or object
+   *
+   * @param data
+   * @param {IRestActionInner} options
+   * @return {any}
+   */
   $map(data: any, options: IRestActionInner = {}): any {
     return data;
   }
 
+  /**
+   * Used to create result object
+   * Is applied on each element of array or object
+   *
+   * @param data
+   * @param {IRestActionInner} options
+   * @return {any}
+   */
   $resultFactory(data: any, options: IRestActionInner = {}): any {
     return data || {};
   }
