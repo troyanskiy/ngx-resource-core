@@ -1,6 +1,6 @@
 {
   "name": "rest-core",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Core of resource library",
   "scripts": {
     "clean": "rimraf dist",

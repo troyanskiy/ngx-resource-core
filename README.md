@@ -8,7 +8,7 @@ In fact, `rest-core` is an abstract common library which uses `RestHandler` to m
 
 All my examples will be based on angalar 4.4.4+
 
-### Known `RestHandlers`
+### Known RestHandlers
 * [`rest-ngx`](https://github.com/troyanskiy/rest-ngx). Based on `HttpClient` from `@angular/common/http`. Includes `RestModule.forRoot`.
 * [`rest-ngx-http`](https://github.com/troyanskiy/rest-ngx-http). Based on `Http` from `@angular/http`. Includes `RestModule.forRoot`.
 * [`rest-cordova-advanced-http`](https://github.com/troyanskiy/rest-cordova-advanced-http). Based on [Cordova Plugin Advanced HTTP](`https://github.com/silkimen/cordova-plugin-advanced-http`).
