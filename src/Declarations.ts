@@ -25,14 +25,9 @@ export interface IRestParams extends IRestParamsBase {
 export interface IRestAction extends IRestParams {
   method?: RestRequestMethod; // get default
   expectJsonArray?: boolean;
-  // requestInterceptor?: IRestRequestInterceptor;
-  // responseInterceptor?: IRestResponseInterceptor;
   resultFactory?: IRestResultFactory;
   map?: IRestResponseMap;
   filter?: IRestResponseFilter;
-  // model?: Type<RestModel<Rest>>;
-  // useModel?: boolean;
-  // skipDataCleaning?: boolean;
 }
 
 export interface IRestResponseMap {
