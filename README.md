@@ -77,11 +77,11 @@ export class MyService {
   constructor(private myRest: MyAuthRest, private userRest: UserRest) {}
   
   doLogin(login: string, password: string): Promise<any> {
-    return this.login({login, password});
+    return this.myRest.login({login, password});
   }
   
   doLogout(): Promise<any> {
-    return this.logout();
+    return this.myRest.logout();
   }
   
   async loginAndLoadUser(login: string, password: string, userId: string): Promise<any> {
