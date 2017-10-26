@@ -19,6 +19,7 @@ export interface IRestParams extends IRestParamsBase {
   asPromise?: boolean;
   requestBodyType?: RestRequestBodyType;
   responseBodyType?: RestResponseBodyType;
+  queryMappingMethod?: RestQueryMappingMethod;
   [prop: string]: any;
 }
 
@@ -54,6 +55,8 @@ export interface IRestActionInner {
   actionAttributes?: IRestActionAttributes;
   actionOptions?: IRestAction;
   resolvedOptions?: IRestParamsBase;
+
+  queryMappingMethod?: RestQueryMappingMethod;
 
   usedInPath?: {[key: string]: boolean};
   mainPromise?: Promise<any>;
@@ -139,8 +142,8 @@ export enum RestRequestMethod {
   Patch = 7
 }
 
-export enum RestGetParamsMappingType {
-  Plain,
-  Bracket,
-  JQueryParamsBracket
+export enum RestQueryMappingMethod {
+  Plain = 1,
+  Bracket = 2,
+  JQueryParamsBracket = 3
 }

@@ -1,4 +1,4 @@
-import { RestGetParamsMappingType, RestResponseBodyType } from './Declarations';
+import { RestQueryMappingMethod, RestResponseBodyType } from './Declarations';
 
 export class RestGlobalConfig {
   static url: string | Promise<string> = null;
@@ -18,6 +18,6 @@ export class RestGlobalConfig {
   static responseBodyType: RestResponseBodyType = RestResponseBodyType.Json;
 
 
-  static getParamsMappingType: RestGetParamsMappingType = null;
+  static queryMappingMethod: RestQueryMappingMethod = RestQueryMappingMethod.Plain;
 
 }

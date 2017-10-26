@@ -2,7 +2,7 @@ import {
   IRestAction,
   IRestActionInner,
   IRestResponse,
-  RestGetParamsMappingType,
+  RestQueryMappingMethod,
   RestRequestBodyType,
   RestRequestMethod
 } from './Declarations';
@@ -452,7 +452,7 @@ export class Rest {
       options.requestOptions.query = {};
       Object.keys(oq).forEach((key: string) => {
         if (oq.hasOwnProperty(key) && !options.usedInPath[key]) {
-          this.$appendQueryParams(options.requestOptions.query, key, oq[key]);
+          this.$appendQueryParams(options.requestOptions.query, key, oq[key], options.queryMappingMethod);
         }
       });
     }
@@ -462,12 +462,16 @@ export class Rest {
       this.$appendQueryParams(
         options.requestOptions.query,
         options.actionOptions.addTimestamp as string,
-        Date.now().toString(10));
+        Date.now().toString(10),
+        options.queryMappingMethod);
     }
 
   }
 
-  protected $appendQueryParams(query: { [prop: string]: string }, key: string, value: any): void {
+  protected $appendQueryParams(query: { [prop: string]: string },
+                               key: string,
+                               value: any,
+                               queryMappingMethod: RestQueryMappingMethod): void {
 
     if (value instanceof Date) {
       query[key] = value.toISOString();
@@ -477,9 +481,9 @@ export class Rest {
 
     if (typeof value === 'object') {
 
-      switch (RestGlobalConfig.getParamsMappingType) {
+      switch (queryMappingMethod) {
 
-        case RestGetParamsMappingType.Plain:
+        case RestQueryMappingMethod.Plain:
 
           if (Array.isArray(value)) {
             for (const arrValue of value) {
@@ -500,16 +504,16 @@ export class Rest {
           }
           break;
 
-        case RestGetParamsMappingType.Bracket:
+        case RestQueryMappingMethod.Bracket:
           /// Convert object and arrays to query params
           for (const k in value) {
             if (value.hasOwnProperty(k)) {
-              this.$appendQueryParams(query, `${key}[${k}]`, value[k]);
+              this.$appendQueryParams(query, `${key}[${k}]`, value[k], queryMappingMethod);
             }
           }
           break;
 
-        case RestGetParamsMappingType.JQueryParamsBracket:
+        case RestQueryMappingMethod.JQueryParamsBracket:
           /// Convert object and arrays to query params according to $.params
           for (const k in value) {
             if (value.hasOwnProperty(k)) {
@@ -517,7 +521,7 @@ export class Rest {
               if (Array.isArray(value) && typeof value[<any>k] !== 'object') {
                 path = `${key}[]`;
               }
-              this.$appendQueryParams(query, path, value[k]);
+              this.$appendQueryParams(query, path, value[k], queryMappingMethod);
             }
           }
 
@@ -568,7 +572,7 @@ export class Rest {
       actionAttributes.query = actionAttributes.params;
     }
 
-
+    options.queryMappingMethod = actionOptions.queryMappingMethod || RestGlobalConfig.queryMappingMethod;
 
   }
 
