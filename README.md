@@ -77,11 +77,11 @@ export class MyService {
   constructor(private myRest: MyAuthRest, private userRest: UserRest) {}
   
   doLogin(login: string, password: string): Promise<any> {
-    return this.login({login, password});
+    return this.myRest.login({login, password});
   }
   
   doLogout(): Promise<any> {
-    return this.logout();
+    return this.myRest.logout();
   }
   
   async loginAndLoadUser(login: string, password: string, userId: string): Promise<any> {
@@ -164,7 +164,9 @@ export interface IUser {
 
 export class GroupRest extends RestCRUD<IGroupQuery, Group, Group> {
   
-  constructor(restHandler: RestHandler) {}
+  constructor(restHandler: RestHandler) {
+    super(restHandler);
+  }
   
   $resultFactory(data: any, options: IRestActionInner = {}): any {
     return new Group(data);
@@ -180,6 +182,7 @@ export class Group extends RestModel {
   title: string;
   
   constructor(data?: IGroup) {
+    super();
     if (data) {
       this.$setData(data);
     }
@@ -194,7 +197,9 @@ export class Group extends RestModel {
 
 export class UserRest extends RestCRUD<IUserQuery, User, User> {
   
-  constructor(restHandler: RestHandler) {}
+  constructor(restHandler: RestHandler) {
+      super(restHandler);
+  }
   
   $resultFactory(data: any, options: IRestActionInner = {}): any {
     return new User(data);
@@ -215,14 +220,16 @@ export class User extends RestModel implements IUser {
   fullName: string; // generated from first name and last name
   
   constructor(data?: IUser) {
+    super();
     if (data) {
       this.$setData(data);
     }
   }
   
-  $setData(data: IUser) {
+  $setData(data: IUser): this {
     Object.assign(data);
     this.fullName = `${this.firstName} ${this.lastName}`;
+    return this;
   }
   
   toJSON() {
