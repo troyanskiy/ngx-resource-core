@@ -266,6 +266,37 @@ async someMethodToCreateGroupAndUser() {
 ```
 
 
+## QueryParams Conversion
+
+You can define the way query params are converted
+Set the global config at the root of your app.
+
+`RestGlobalConfig.queryMappingMethod = RestQueryMappingMethod.<CONVERTION_STRATEGY>`
+
+```
+{
+  a: [{ b:1, c: [2, 3] }]
+}
+```
+
+With `<CONVERTION_STRATEGY>` being an enumerable within
+
+#### Plain (default)
+No convertion at all. 
+
+Output: `?a=[Object object]`
+
+#### Bracket
+All array elements will be indexed
+
+Output: `?a[0][b]=10383&a[0][c][0]=2&a[0][c][1]=3`
+
+#### JQueryParamsBracket 
+Implements the standard $.params way of converting
+
+Output: `?a[0][b]=10383&a[0][c][]=2&a[0][c][]=3`
+
+
 ## Developing Rest Handler
 
 Use [`RestHandler`](https://github.com/troyanskiy/rest-core/blob/master/src/RestHandler.ts) abstract class as parent to create your Handler. I think it's clear what should it do by checking sources of the class.
