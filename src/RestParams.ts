@@ -1,6 +1,6 @@
-import { IRestParamsBase } from './Declarations';
+import { IRestParams } from './Declarations';
 
-export function RestParams(params: IRestParamsBase = {}) {
+export function RestParams(params: IRestParams = {}) {
 
   return function (target: any) {
 
