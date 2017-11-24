@@ -468,7 +468,7 @@ export class Rest {
 
   }
 
-  protected $appendQueryParams(query: { [prop: string]: string },
+  protected $appendQueryParams(query: { [prop: string]: string | any[] },
                                key: string,
                                value: any,
                                queryMappingMethod: RestQueryMappingMethod): void {
@@ -486,9 +486,10 @@ export class Rest {
         case RestQueryMappingMethod.Plain:
 
           if (Array.isArray(value)) {
-            for (const arrValue of value) {
-              query[key] = arrValue;
-            }
+            query[key] = value.join(',');
+            // for (const arrValue of value) {
+            //   query[key] = arrValue;
+            // }
           } else {
 
             if (value && typeof value === 'object') {
