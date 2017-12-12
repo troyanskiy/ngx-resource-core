@@ -1,6 +1,6 @@
 {
-  "name": "rest-core",
-  "version": "0.2.2",
+  "name": "@ngx-resource/core",
+  "version": "0.9.4",
   "description": "Core of resource library",
   "scripts": {
     "clean": "rimraf dist",
@@ -11,28 +11,25 @@
     "build.full": "npm run build && cp package.json dist/package.json && cp README.md dist/README.md"
   },
   "keywords": [
-    "rest",
-    "rest-core",
     "ngx-resource",
+    "ngx-resource-core",
     "ngx-resource-rest",
     "ng2-resource",
     "ng2-resource-rest",
-    "ng2",
-    "ng2-rest",
     "Angular2",
     "Resource"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/troyanskiy/rest-core.git"
+    "url": "git+https://github.com/troyanskiy/ngx-resource-core.git"
   },
-  "main": "bundles/rest-core.umd.js",
+  "main": "bundles/core.umd.js",
   "module": "index.js",
   "typings": "index.d.ts",
   "author": "Roman Rosluk <roma@redbox.by>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/troyanskiy/rest-core/issues"
+    "url": "https://github.com/troyanskiy/ngx-resource-core/issues"
   },
   "devDependencies": {
     "@types/node": "^8.0.34",

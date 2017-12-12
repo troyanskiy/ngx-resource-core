@@ -1,6 +1,6 @@
-import { RestHelper } from './RestHelper';
+import { ResourceHelper } from './ResourceHelper';
 
-export abstract class RestModel {
+export abstract class ResourceModel {
 
   abstract readonly $rest: any = null;
 
@@ -37,7 +37,7 @@ export abstract class RestModel {
   }
 
   public toJSON(): any {
-    return RestHelper.cleanData(this);
+    return ResourceHelper.cleanData(this);
   }
 
   protected isNew(): boolean {
@@ -47,7 +47,7 @@ export abstract class RestModel {
   private $resource_method(methodName: string) {
 
     if (!this.$rest) {
-      console.error(`Your Rest is not defined`);
+      console.error(`Your Resource is not defined`);
 
       return this;
     }
@@ -55,13 +55,13 @@ export abstract class RestModel {
     const restInstance = this.$rest.instance;
 
     if (!restInstance) {
-      console.error(`Your Rest is not defined or not created`);
+      console.error(`Your Resource is not defined or not created`);
 
       return this;
     }
 
     if (!restInstance[methodName]) {
-      console.error(`Your Rest has no implemented ${methodName} method.`);
+      console.error(`Your Resource has no implemented ${methodName} method.`);
 
       return this;
     }

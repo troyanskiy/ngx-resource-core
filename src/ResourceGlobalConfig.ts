@@ -1,6 +1,6 @@
-import { RestQueryMappingMethod, RestResponseBodyType } from './Declarations';
+import { ResourceQueryMappingMethod, ResourceResponseBodyType } from './Declarations';
 
-export class RestGlobalConfig {
+export class ResourceGlobalConfig {
   static url: string | Promise<string> = null;
   static pathPrefix: string | Promise<string> = null;
   static path: string | Promise<string> = null;
@@ -15,9 +15,9 @@ export class RestGlobalConfig {
   static lean: boolean = null;
   static asPromise: boolean = true;
   // static toObservable: boolean = null;
-  static responseBodyType: RestResponseBodyType = RestResponseBodyType.Json;
+  static responseBodyType: ResourceResponseBodyType = ResourceResponseBodyType.Json;
 
 
-  static queryMappingMethod: RestQueryMappingMethod = RestQueryMappingMethod.Plain;
+  static queryMappingMethod: ResourceQueryMappingMethod = ResourceQueryMappingMethod.Plain;
 
 }

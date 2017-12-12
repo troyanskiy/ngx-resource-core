@@ -1,3 +1,10 @@
+## 0.9.4
+
+### Breaking changes
+
+* Use npm `@ngx-resource/core` instead of `rest-core`
+* All `Rest` names and file refactored to `Resource`
+
 ## 0.2.0
 
 ### Bug Fixes

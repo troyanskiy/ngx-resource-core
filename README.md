@@ -1,68 +1,66 @@
-[![npm version](https://badge.fury.io/js/rest-core.svg)](http://badge.fury.io/js/rest-core)
+[![npm version](https://img.shields.io/npm/v/%40ngx-resource%2Fcore.svg)](https://www.npmjs.com/package/@ngx-resource/core)
 
-[![NPM](https://nodei.co/npm/rest-core.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/rest-core/)
-
-# rest-core
-Rest Core is an evolution of ngx-resource lib which provides freedom for the developers. Each developer can implement his own request handlers.
-In fact, `rest-core` is an abstract common library which uses `RestHandler` to make an requests, so it's even possible to use the lib on node.js server side with typescript. Just need to implement `RestHandler` for it.
+# @ngx-resource/core
+Resource Core is an evolution of ngx-resource lib which provides freedom for the developers. Each developer can implement his own request handlers.
+In fact, `@ngx-resource/core` is an abstract common library which uses `ResourceHandler` to make an requests, so it's even possible to use the lib on node.js server side with typescript. Just need to implement `ResourceHandler` for it.
 
 All my examples will be based on angalar 4.4.4+
 
-### Known RestHandlers
-* [`rest-ngx`](https://github.com/troyanskiy/rest-ngx). Based on `HttpClient` from `@angular/common/http`. Includes `RestModule.forRoot`.
-* [`rest-ngx-http`](https://github.com/troyanskiy/rest-ngx-http). Based on `Http` from `@angular/http`. Includes `RestModule.forRoot`.
-* [`rest-cordova-advanced-http`](https://github.com/troyanskiy/rest-cordova-advanced-http). Based on [Cordova Plugin Advanced HTTP](`https://github.com/silkimen/cordova-plugin-advanced-http`).
-* `rest-fetch`. Besed on [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API). Not yet created.
+### Known ResourceHandlers
+* [`@ngx-resource/handler-ngx-http`](https://github.com/troyanskiy/ngx-resource-handler-ngx-http). Based on `HttpClient` from `@angular/common/http`. Includes `ResourceModule.forRoot`.
+* [`@ngx-resource/handler-ngx-http-legacy`](https://github.com/troyanskiy/ngx-resource-handler-ngx-http-legacy). Based on `Http` from `@angular/http`. Includes `ResourceModule.forRoot`.
+* [`@ngx-resource/handler-cordova-advanced-http`](https://github.com/troyanskiy/ngx-resource-handler-cordova-advanced-http). Based on [Cordova Plugin Advanced HTTP](`https://github.com/silkimen/cordova-plugin-advanced-http`).
+* `@ngx-resource/handler-fetch`. Besed on [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API). Not yet created.
 
 
 ## Creation of rest class
 
 ```typescript
 @Injectable()
-@RestParams({
-  // IRestParams
+@ResourceParams({
+  // IResourceParams
   pathPrefix: '/auth'
 })
-export class MyAuthRest extends Rest {
+export class MyAuthResource extends Resource {
 
-  @RestAction({
-    // IRestAction
-    method: RestRequestMethod.Post
+  @ResourceAction({
+    // IResourceAction
+    method: ResourceRequestMethod.Post
     path: '/login'
   })
-  login: IRestMethod<{login: string, password: string}, IReturnData>; // will make an post request to /auth/login
+  login: IResourceMethod<{login: string, password: string}, IReturnData>; // will make an post request to /auth/login
 
-  @RestAction({
-    // IRestAction
-    //method: RestRequestMethod.Get is by default
+  @ResourceAction({
+    // IResourceAction
+    //method: ResourceRequestMethod.Get is by default
     path: '/logout'
   })
-  logout: IRestMethod<void, void>;
+  logout: IResourceMethod<void, void>;
   
-  constructor(restHandler: RestHandler) {
+  constructor(restHandler: ResourceHandler) {
     super(restHandler);
   }
   
 }
 
 @Injectable()
-@RestParams({
-  // IRestParams
+@ResourceParams({
+  // IResourceParams
   pathPrefix: '/user'
 })
-export class UserRest extends Rest {
+export class UserResource extends Resource {
   
-  @RestAction({
+  @ResourceAction({
     path: '/{!id}'
   })
-  getUser: IRestMethod<{id: string}, IUser>; // will call /user/id
+  getUser: IResourceMethod<{id: string}, IUser>; // will call /user/id
   
-  @RestAction({
-    method: RestRequestMethod.Post
+  @ResourceAction({
+    method: ResourceRequestMethod.Post
   })
-  createUser: IRestMethodStrict<IUser, IUserQuery, IUserPathParams, IUser>;
+  createUser: IResourceMethodStrict<IUser, IUserQuery, IUserPathParams, IUser>;
   
-  constructor(restHandler: RestHandler) {
+  constructor(restHandler: ResourceHandler) {
     super(restHandler);
   }
   
@@ -74,30 +72,30 @@ export class MyService {
   
   private user: IUser = null;
 
-  constructor(private myRest: MyAuthRest, private userRest: UserRest) {}
+  constructor(private myResource: MyAuthResource, private userResource: UserResource) {}
   
   doLogin(login: string, password: string): Promise<any> {
-    return this.myRest.login({login, password});
+    return this.myResource.login({login, password});
   }
   
   doLogout(): Promise<any> {
-    return this.myRest.logout();
+    return this.myResource.logout();
   }
   
   async loginAndLoadUser(login: string, password: string, userId: string): Promise<any> {
     await this.doLogin(login, password);
-    this.user = await this.userRest.getUser({id: userId});
+    this.user = await this.userResource.getUser({id: userId});
   }
   
 }
 
 ```
 
-Final url is generated by concatination of `$getUrl`, `$getPathPrefix` and `$getPath` methods of `Rest` base class.
+Final url is generated by concatination of `$getUrl`, `$getPathPrefix` and `$getPath` methods of `Resource` base class.
 
-### [IRestParams](https://github.com/troyanskiy/rest-core/blob/master/src/Declarations.ts#L2-L23) 
+### [IResourceParams](https://github.com/troyanskiy/ngx-resource-core/blob/master/src/Declarations.ts#L2-L23) 
 
-Is used by `RestParams` decorator for class decoration
+Is used by `ResourceParams` decorator for class decoration
 
 List of params:
 * `url?: string;` - url of the api server; *default `''`*
@@ -114,22 +112,22 @@ List of params:
 * `lean?: boolean;` - do no add `$` properties on result. Used only with `toPromise: false` *default `false`*
 * `mutateBody?: boolean;` - if need to mutate provided body with response body. *default `false`*
 * `asPromise?: boolean;` - if method should return promise or object, which will be fullfilled after receiving response. *default `true`*
-* `requestBodyType?: RestRequestBodyType;` - request body type. *default: will be detected automatically*.
-Check for possible body types in the sources of [RestRequestBodyType](https://github.com/troyanskiy/rest-core/blob/master/src/Declarations.ts#L114-L122). Type detection algorithm [check here](https://github.com/troyanskiy/rest-core/blob/master/src/RestHelper.ts#L12-L34).
-* `responseBodyType?: RestResponseBodyType;` - response body type. *default: `RestResponseBodyType.JSON`* Possible body type can be checked here [RestResponseBodyType](https://github.com/troyanskiy/rest-core/blob/master/src/Declarations.ts#L124-L129).
+* `requestBodyType?: ResourceRequestBodyType;` - request body type. *default: will be detected automatically*.
+Check for possible body types in the sources of [ResourceRequestBodyType](https://github.com/troyanskiy/ngx-resource-core/blob/master/src/Declarations.ts#L114-L122). Type detection algorithm [check here](https://github.com/troyanskiy/ngx-resource-core/blob/master/src/ResourceHelper.ts#L12-L34).
+* `responseBodyType?: ResourceResponseBodyType;` - response body type. *default: `ResourceResponseBodyType.JSON`* Possible body type can be checked here [ResourceResponseBodyType](https://github.com/troyanskiy/ngx-resource-core/blob/master/src/Declarations.ts#L124-L129).
 
-### [IRestAction](https://github.com/troyanskiy/rest-core/blob/master/src/Declarations.ts#L2-L31) 
+### [IResourceAction](https://github.com/troyanskiy/ngx-resource-core/blob/master/src/Declarations.ts#L2-L31) 
 
-Is used by `RestAction` decorator for methods.
+Is used by `ResourceAction` decorator for methods.
 
 List of params (is all above) plus following:
-* `method?: RestRequestMethod;` - method of request. *Default `RestRequestMethod.Get`*. All possible methods listed in [RestRequestMethod](https://github.com/troyanskiy/rest-core/blob/master/src/Declarations.ts#L131-L139)
+* `method?: ResourceRequestMethod;` - method of request. *Default `ResourceRequestMethod.Get`*. All possible methods listed in [ResourceRequestMethod](https://github.com/troyanskiy/ngx-resource-core/blob/master/src/Declarations.ts#L131-L139)
 * `expectJsonArray?: boolean;` - if expected to receive an array. The field is used only with `toPromise: false`. *Default `false`*.
-* `resultFactory?: IRestResultFactory;` - custom method to create result object. *Default: `returns {}`*
-* `map?: IRestResponseMap;` - custom data mapping method. *Default: `returns without any changes`*
-* `filter?: IRestResponseFilter;` - custom data filtering method. *Default: `returns true`*
+* `resultFactory?: IResourceResultFactory;` - custom method to create result object. *Default: `returns {}`*
+* `map?: IResourceResponseMap;` - custom data mapping method. *Default: `returns without any changes`*
+* `filter?: IResourceResponseFilter;` - custom data filtering method. *Default: `returns true`*
 
-### [RestGlobalConfig](https://github.com/troyanskiy/rest-core/blob/master/src/RestGlobalConfig.ts)
+### [ResourceGlobalConfig](https://github.com/troyanskiy/ngx-resource-core/blob/master/src/ResourceGlobalConfig.ts)
 Mainly used to set defaults
 
 
@@ -162,21 +160,21 @@ export interface IUser {
   groupId: string;
 }
 
-export class GroupRest extends RestCRUD<IGroupQuery, Group, Group> {
+export class GroupResource extends ResourceCRUD<IGroupQuery, Group, Group> {
   
-  constructor(restHandler: RestHandler) {
+  constructor(restHandler: ResourceHandler) {
     super(restHandler);
   }
   
-  $resultFactory(data: any, options: IRestActionInner = {}): any {
+  $resultFactory(data: any, options: IResourceActionInner = {}): any {
     return new Group(data);
   }
   
 }
 
-export class Group extends RestModel {
+export class Group extends ResourceModel {
   
-  readonly $rest = GroupRest;
+  readonly $rest = GroupResource;
 
   id: number;
   title: string;
@@ -195,21 +193,21 @@ export class Group extends RestModel {
   
 }
 
-export class UserRest extends RestCRUD<IUserQuery, User, User> {
+export class UserResource extends ResourceCRUD<IUserQuery, User, User> {
   
-  constructor(restHandler: RestHandler) {
+  constructor(restHandler: ResourceHandler) {
       super(restHandler);
   }
   
-  $resultFactory(data: any, options: IRestActionInner = {}): any {
+  $resultFactory(data: any, options: IResourceActionInner = {}): any {
     return new User(data);
   }
   
 }
 
-export class User extends RestModel implements IUser {
+export class User extends ResourceModel implements IUser {
 
-  readonly $rest = UserRest;
+  readonly $rest = UserResource;
 
   id: number;
   userName: string;
@@ -271,7 +269,7 @@ async someMethodToCreateGroupAndUser() {
 You can define the way query params are converted
 Set the global config at the root of your app.
 
-`RestGlobalConfig.queryMappingMethod = RestQueryMappingMethod.<CONVERTION_STRATEGY>`
+`ResourceGlobalConfig.queryMappingMethod = ResourceQueryMappingMethod.<CONVERTION_STRATEGY>`
 
 ```
 {
@@ -297,6 +295,6 @@ Implements the standard $.params way of converting
 Output: `?a[0][b]=10383&a[0][c][]=2&a[0][c][]=3`
 
 
-## Developing Rest Handler
+## Developing Resource Handler
 
-Use [`RestHandler`](https://github.com/troyanskiy/rest-core/blob/master/src/RestHandler.ts) abstract class as parent to create your Handler. I think it's clear what should it do by checking sources of the class.
+Use [`ResourceHandler`](https://github.com/troyanskiy/ngx-resource-core/blob/master/src/ResourceHandler.ts) abstract class as parent to create your Handler. I think it's clear what should it do by checking sources of the class.

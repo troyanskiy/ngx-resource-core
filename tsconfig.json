@@ -14,16 +14,16 @@
   },
   "files": [
     "index.ts",
-    "rest-core.ts",
+    "core.ts",
     "src/Declarations.ts",
-    "src/Rest.ts",
-    "src/RestAction.ts",
-    "src/RestGlobalConfig.ts",
-    "src/RestHandler.ts",
-    "src/RestHelper.ts",
-    "src/RestModel.ts",
-    "src/RestParams.ts",
-    "src/RestCommon/RestCRUD.ts"
+    "src/Resource.ts",
+    "src/ResourceAction.ts",
+    "src/ResourceGlobalConfig.ts",
+    "src/ResourceHandler.ts",
+    "src/ResourceHelper.ts",
+    "src/ResourceModel.ts",
+    "src/ResourceParams.ts",
+    "src/ResourceCommon/ResourceCRUD.ts"
   ],
   "exclude": [
     "node_modules",

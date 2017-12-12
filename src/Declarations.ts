@@ -1,5 +1,5 @@
 
-export interface IRestParamsBase {
+export interface IResourceParamsBase {
   url?: string;
   pathPrefix?: string;
   path?: string;
@@ -9,7 +9,7 @@ export interface IRestParamsBase {
   query?: any;
 }
 
-export interface IRestParams extends IRestParamsBase {
+export interface IResourceParams extends IResourceParamsBase {
   rootNode?: string;
   removeTrailingSlash?: boolean;
   addTimestamp?: boolean | string;
@@ -17,33 +17,33 @@ export interface IRestParams extends IRestParamsBase {
   lean?: boolean;
   mutateBody?: boolean;
   asPromise?: boolean;
-  requestBodyType?: RestRequestBodyType;
-  responseBodyType?: RestResponseBodyType;
-  queryMappingMethod?: RestQueryMappingMethod;
+  requestBodyType?: ResourceRequestBodyType;
+  responseBodyType?: ResourceResponseBodyType;
+  queryMappingMethod?: ResourceQueryMappingMethod;
   [prop: string]: any;
 }
 
-export interface IRestAction extends IRestParams {
-  method?: RestRequestMethod; // get default
+export interface IResourceAction extends IResourceParams {
+  method?: ResourceRequestMethod; // get default
   expectJsonArray?: boolean;
-  resultFactory?: IRestResultFactory;
-  map?: IRestResponseMap;
-  filter?: IRestResponseFilter;
+  resultFactory?: IResourceResultFactory;
+  map?: IResourceResponseMap;
+  filter?: IResourceResponseFilter;
 }
 
-export interface IRestResponseMap {
-  (item: any, options: IRestActionInner): any;
+export interface IResourceResponseMap {
+  (item: any, options: IResourceActionInner): any;
 }
 
-export interface IRestResponseFilter {
-  (item: any, options: IRestActionInner): boolean;
+export interface IResourceResponseFilter {
+  (item: any, options: IResourceActionInner): boolean;
 }
 
-export interface IRestResultFactory {
-  (item: any, options: IRestActionInner): any;
+export interface IResourceResultFactory {
+  (item: any, options: IResourceActionInner): any;
 }
 
-export interface IRestActionAttributes {
+export interface IResourceActionAttributes {
   body: any;
   query: any;
   params: any;
@@ -51,71 +51,98 @@ export interface IRestActionAttributes {
   onError(data: any): any;
 }
 
-export interface IRestActionInner {
-  actionAttributes?: IRestActionAttributes;
-  actionOptions?: IRestAction;
-  resolvedOptions?: IRestParamsBase;
+export interface IResourceActionInner {
+  actionAttributes?: IResourceActionAttributes;
+  actionOptions?: IResourceAction;
+  resolvedOptions?: IResourceParamsBase;
 
-  queryMappingMethod?: RestQueryMappingMethod;
+  queryMappingMethod?: ResourceQueryMappingMethod;
 
   usedInPath?: {[key: string]: boolean};
   mainPromise?: Promise<any>;
   isModel?: boolean;
 
-  requestOptions?: IRestRequest;
+  requestOptions?: IResourceRequest;
 
   returnData?: any;
 }
 
-export interface IRestRequest {
-  method?: RestRequestMethod;
+export interface IResourceRequest {
+  method?: ResourceRequestMethod;
   headers?: any;
   url?: string;
   withCredentials?: boolean;
   body?: any;
   query?: {[prop: string]: string};
-  responseBodyType?: RestResponseBodyType;
-  requestBodyType?: RestRequestBodyType;
+  responseBodyType?: ResourceResponseBodyType;
+  requestBodyType?: ResourceRequestBodyType;
 }
 
-export interface IRestHandlerResponse {
-  promise: Promise<IRestResponse>;
+export interface IResourceHandlerResponse {
+  promise: Promise<IResourceResponse>;
   abort?(): void;
 }
 
-export interface IRestResponse {
+export interface IResourceResponse {
   status: number;
   headers?: any;
   body?: any;
 }
 
-export interface IRestMethodStrict<IB, IQ, IP, O> {
-  (body: IB, query: IQ, params: IP, onSuccess?: (data: O) => any, onError?: (err: IRestResponse) => any): Promise<O>;
-  (body: IB, query: IQ, onSuccess?: (data: O) => any, onError?: (err: IRestResponse) => any): Promise<O>;
-  (body: IB, onSuccess?: (data: O) => any, onError?: (err: IRestResponse) => any): Promise<O>;
-  (onSuccess?: (data: O) => any, onError?: (err: IRestResponse) => any): Promise<O>;
+export interface IResourceMethodStrict<IB, IQ, IP, O> {
+  (body: IB,
+   query: IQ,
+   params: IP,
+   onSuccess?: (data: O) => any,
+   onError?: (err: IResourceResponse) => any): Promise<O>;
+
+  (body: IB,
+   query: IQ,
+   onSuccess?: (data: O) => any,
+   onError?: (err: IResourceResponse) => any): Promise<O>;
+
+  (body: IB,
+   onSuccess?: (data: O) => any,
+   onError?: (err: IResourceResponse) => any): Promise<O>;
+
+  (onSuccess?: (data: O) => any,
+   onError?: (err: IResourceResponse) => any): Promise<O>;
+
 }
 
-export interface IRestMethodResultStrict<IB, IQ, IP, O> {
-  (body: IB, query: IQ, params: IP, onSuccess?: (data: RestResult<O>) => any, onError?: (err: IRestResponse) => any): RestResult<O>;
-  (body: IB, query: IQ, onSuccess?: (data: RestResult<O>) => any, onError?: (err: IRestResponse) => any): RestResult<O>;
-  (body: IB, onSuccess?: (data: RestResult<O>) => any, onError?: (err: IRestResponse) => any): RestResult<O>;
-  (onSuccess?: (data: RestResult<O>) => any, onError?: (err: IRestResponse) => any): RestResult<O>;
+export interface IResourceMethodResultStrict<IB, IQ, IP, O> {
+  (body: IB,
+   query: IQ,
+   params: IP,
+   onSuccess?: (data: ResourceResult<O>) => any,
+   onError?: (err: IResourceResponse) => any): ResourceResult<O>;
+
+  (body: IB,
+   query: IQ,
+   onSuccess?: (data: ResourceResult<O>) => any,
+   onError?: (err: IResourceResponse) => any): ResourceResult<O>;
+
+  (body: IB,
+   onSuccess?: (data: ResourceResult<O>) => any,
+   onError?: (err: IResourceResponse) => any): ResourceResult<O>;
+
+  (onSuccess?: (data: ResourceResult<O>) => any,
+   onError?: (err: IResourceResponse) => any): ResourceResult<O>;
 }
 
-export interface IRestMethodResult<IB, O> extends IRestMethodResultStrict<IB, any, any, O> {}
+export interface IResourceMethodResult<IB, O> extends IResourceMethodResultStrict<IB, any, any, O> {}
 
-export interface IRestMethod<IB, O> extends IRestMethodStrict<IB, any, any, O> {}
+export interface IResourceMethod<IB, O> extends IResourceMethodStrict<IB, any, any, O> {}
 
 
-export type RestResult<R extends {}> = R & {
+export type ResourceResult<R extends {}> = R & {
   $resolved?: boolean;
   $promise?: Promise<R>;
   $abort?(): void;
 };
 
 
-export enum RestRequestBodyType {
+export enum ResourceRequestBodyType {
   NONE = 0,
   JSON = 1,
   FORM = 2,
@@ -125,14 +152,14 @@ export enum RestRequestBodyType {
   ARRAY_BUFFER = 6
 }
 
-export enum RestResponseBodyType {
+export enum ResourceResponseBodyType {
   Text = 1,
   Json = 2,
   ArrayBuffer = 3,
   Blob = 4
 }
 
-export enum RestRequestMethod {
+export enum ResourceRequestMethod {
   Get = 1,
   Post = 2,
   Put = 3,
@@ -142,7 +169,7 @@ export enum RestRequestMethod {
   Patch = 7
 }
 
-export enum RestQueryMappingMethod {
+export enum ResourceQueryMappingMethod {
   Plain = 1,
   Bracket = 2,
   JQueryParamsBracket = 3

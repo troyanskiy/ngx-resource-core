@@ -1,16 +1,16 @@
 import {
-  IRestAction,
-  IRestActionInner,
-  IRestResponse,
-  RestQueryMappingMethod,
-  RestRequestBodyType,
-  RestRequestMethod
+  IResourceAction,
+  IResourceActionInner,
+  IResourceResponse,
+  ResourceQueryMappingMethod,
+  ResourceRequestBodyType,
+  ResourceRequestMethod
 } from './Declarations';
-import { RestGlobalConfig } from './RestGlobalConfig';
-import { RestHelper } from './RestHelper';
-import { RestHandler } from './RestHandler';
+import { ResourceGlobalConfig } from './ResourceGlobalConfig';
+import { ResourceHelper } from './ResourceHelper';
+import { ResourceHandler } from './ResourceHandler';
 
-export class Rest {
+export class Resource {
 
   private $url: string = null;
   private $pathPrefix: string = null;
@@ -20,18 +20,18 @@ export class Rest {
   private $params: any = null;
   private $query: any = null;
 
-  constructor(protected requestHandler: RestHandler) {
+  constructor(protected requestHandler: ResourceHandler) {
     (this.constructor as any).instance = this;
   }
 
   /**
    * Used to get url
    *
-   * @param {IRestAction} actionOptions
+   * @param {IResourceAction} actionOptions
    * @return {string | Promise<string>}
    */
-  $getUrl(actionOptions: IRestAction = {}): string | Promise<string> {
-    return this.$url || actionOptions.url || RestGlobalConfig.url || '';
+  $getUrl(actionOptions: IResourceAction = {}): string | Promise<string> {
+    return this.$url || actionOptions.url || ResourceGlobalConfig.url || '';
   }
 
   $setUrl(url: string) {
@@ -41,11 +41,11 @@ export class Rest {
   /**
    * Used to get path prefix
    *
-   * @param {IRestAction} actionOptions
+   * @param {IResourceAction} actionOptions
    * @return {string | Promise<string>}
    */
-  $getPathPrefix(actionOptions: IRestAction = {}): string | Promise<string> {
-    return this.$pathPrefix || actionOptions.pathPrefix || RestGlobalConfig.pathPrefix || '';
+  $getPathPrefix(actionOptions: IResourceAction = {}): string | Promise<string> {
+    return this.$pathPrefix || actionOptions.pathPrefix || ResourceGlobalConfig.pathPrefix || '';
   }
 
   $setPathPrefix(path: string) {
@@ -55,11 +55,11 @@ export class Rest {
   /**
    * Used to get path
    *
-   * @param {IRestAction} actionOptions
+   * @param {IResourceAction} actionOptions
    * @return {string | Promise<string>}
    */
-  $getPath(actionOptions: IRestAction = {}): string | Promise<string> {
-    return this.$path || actionOptions.path || RestGlobalConfig.path || '';
+  $getPath(actionOptions: IResourceAction = {}): string | Promise<string> {
+    return this.$path || actionOptions.path || ResourceGlobalConfig.path || '';
   }
 
   $setPath(path: string) {
@@ -69,11 +69,11 @@ export class Rest {
   /**
    * Get headers.
    *
-   * @param {IRestAction} actionOptions
+   * @param {IResourceAction} actionOptions
    * @return {any | Promise<any>}
    */
-  $getHeaders(actionOptions: IRestAction = {}): any | Promise<any> {
-    return this.$headers || actionOptions.headers || RestGlobalConfig.headers || {};
+  $getHeaders(actionOptions: IResourceAction = {}): any | Promise<any> {
+    return this.$headers || actionOptions.headers || ResourceGlobalConfig.headers || {};
   }
 
   $setHeaders(headers: any) {
@@ -83,11 +83,11 @@ export class Rest {
   /**
    * Get body
    *
-   * @param {IRestAction} actionOptions
+   * @param {IResourceAction} actionOptions
    * @return {any | Promise<any>}
    */
-  $getBody(actionOptions: IRestAction = {}): any | Promise<any> {
-    return this.$body || actionOptions.body || RestGlobalConfig.body || {};
+  $getBody(actionOptions: IResourceAction = {}): any | Promise<any> {
+    return this.$body || actionOptions.body || ResourceGlobalConfig.body || {};
   }
 
   $setBody(body: any) {
@@ -97,11 +97,11 @@ export class Rest {
   /**
    * Get path params
    *
-   * @param {IRestAction} actionOptions
+   * @param {IResourceAction} actionOptions
    * @return {any | Promise<any>}
    */
-  $getParams(actionOptions: IRestAction = {}): any | Promise<any> {
-    return this.$params || actionOptions.params || RestGlobalConfig.params || {};
+  $getParams(actionOptions: IResourceAction = {}): any | Promise<any> {
+    return this.$params || actionOptions.params || ResourceGlobalConfig.params || {};
   }
 
   $setParams(params: any) {
@@ -111,11 +111,11 @@ export class Rest {
   /**
    * Get query params
    *
-   * @param {IRestAction} actionOptions
+   * @param {IResourceAction} actionOptions
    * @return {any | Promise<any>}
    */
-  $getQuery(actionOptions: IRestAction = {}): any | Promise<any> {
-    return this.$query || actionOptions.query || RestGlobalConfig.query || {};
+  $getQuery(actionOptions: IResourceAction = {}): any | Promise<any> {
+    return this.$query || actionOptions.query || ResourceGlobalConfig.query || {};
   }
 
   $setQuery(query: any) {
@@ -127,10 +127,10 @@ export class Rest {
    * Is applied on each element of array or object
    *
    * @param data
-   * @param {IRestActionInner} options
+   * @param {IResourceActionInner} options
    * @return {boolean}
    */
-  $filter(data: any, options: IRestActionInner = {}): boolean {
+  $filter(data: any, options: IResourceActionInner = {}): boolean {
     return true;
   }
 
@@ -139,10 +139,10 @@ export class Rest {
    * Is applied on each element of array or object
    *
    * @param data
-   * @param {IRestActionInner} options
+   * @param {IResourceActionInner} options
    * @return {any}
    */
-  $map(data: any, options: IRestActionInner = {}): any {
+  $map(data: any, options: IResourceActionInner = {}): any {
     return data;
   }
 
@@ -151,17 +151,17 @@ export class Rest {
    * Is applied on each element of array or object
    *
    * @param data
-   * @param {IRestActionInner} options
+   * @param {IResourceActionInner} options
    * @return {any}
    */
-  $resultFactory(data: any, options: IRestActionInner = {}): any {
+  $resultFactory(data: any, options: IResourceActionInner = {}): any {
     return data || {};
   }
 
-  $restAction(options: IRestActionInner) {
+  $restAction(options: IResourceActionInner) {
 
-    this.$_setRestActionInnerDefaults(options);
-    this.$_setRestActionOptionDefaults(options);
+    this.$_setResourceActionInnerDefaults(options);
+    this.$_setResourceActionOptionDefaults(options);
 
     const actionOptions = options.actionOptions;
 
@@ -194,8 +194,8 @@ export class Rest {
     }
 
     options.mainPromise = this.$_setResolvedOptions(options)
-      .then((o: IRestActionInner) => this.$_createRequestOptions(o))
-      .then((o: IRestActionInner) => {
+      .then((o: IResourceActionInner) => this.$_createRequestOptions(o))
+      .then((o: IResourceActionInner) => {
         const handlerResp = this.requestHandler.handle(o.requestOptions);
 
         if (o.returnData && this.$_canSetInternalData(options)) {
@@ -204,8 +204,8 @@ export class Rest {
 
         return handlerResp.promise;
       })
-      .then((resp: IRestResponse) => this.$handleSuccessResponse(options, resp))
-      .catch((resp: IRestResponse) => this.$handleErrorResponse(options, resp));
+      .then((resp: IResourceResponse) => this.$handleSuccessResponse(options, resp))
+      .catch((resp: IResourceResponse) => this.$handleErrorResponse(options, resp));
 
 
     if (this.$_canSetInternalData(options)) {
@@ -223,7 +223,7 @@ export class Rest {
 
   }
 
-  protected $handleSuccessResponse(options: IRestActionInner, resp: IRestResponse): any {
+  protected $handleSuccessResponse(options: IResourceActionInner, resp: IResourceResponse): any {
 
     let body = resp.body;
 
@@ -289,7 +289,7 @@ export class Rest {
     return body;
   }
 
-  protected $handleErrorResponse(options: IRestActionInner, resp: IRestResponse): any {
+  protected $handleErrorResponse(options: IResourceActionInner, resp: IResourceResponse): any {
 
     if (options.returnData && this.$_canSetInternalData(options)) {
       options.returnData.$resolved = true;
@@ -302,7 +302,7 @@ export class Rest {
     throw resp;
   }
 
-  protected $setRequestOptionsUrl(options: IRestActionInner): void {
+  protected $setRequestOptionsUrl(options: IResourceActionInner): void {
 
     const ro = options.requestOptions;
 
@@ -316,7 +316,7 @@ export class Rest {
 
     options.usedInPath = {};
 
-    const params = RestHelper.defaults(options.actionAttributes.params, options.resolvedOptions.params);
+    const params = ResourceHelper.defaults(options.actionAttributes.params, options.resolvedOptions.params);
     const pathParams = ro.url.match(/{([^}]*)}/g) || [];
 
 
@@ -344,7 +344,7 @@ export class Rest {
         delete params[pathKey];
       }
 
-      if (RestHelper.isNullOrUndefined(value)) {
+      if (ResourceHelper.isNullOrUndefined(value)) {
         if (isMandatory) {
           const consoleMsg = `Mandatory ${pathParam} path parameter is missing`;
           console.warn(consoleMsg);
@@ -383,7 +383,7 @@ export class Rest {
 
   }
 
-  protected $setRequestOptionsBody(options: IRestActionInner): void {
+  protected $setRequestOptionsBody(options: IResourceActionInner): void {
 
     let body = options.actionAttributes.body;
 
@@ -391,17 +391,17 @@ export class Rest {
       return;
     }
 
-    const realBodyType = RestHelper.getRealTypeOf(body);
+    const realBodyType = ResourceHelper.getRealTypeOf(body);
 
     let bodyOk: boolean = realBodyType === options.actionOptions.requestBodyType;
 
     if (!bodyOk) {
 
-      if (realBodyType === RestRequestBodyType.JSON) {
+      if (realBodyType === ResourceRequestBodyType.JSON) {
 
         switch (options.actionOptions.requestBodyType) {
 
-          case RestRequestBodyType.FORM_DATA:
+          case ResourceRequestBodyType.FORM_DATA:
 
             const newBody = new FormData();
 
@@ -444,7 +444,7 @@ export class Rest {
 
   }
 
-  protected $setRequestOptionsQuery(options: IRestActionInner): void {
+  protected $setRequestOptionsQuery(options: IResourceActionInner): void {
 
     const oq = options.actionAttributes.query;
 
@@ -471,7 +471,7 @@ export class Rest {
   protected $appendQueryParams(query: { [prop: string]: string | any[] },
                                key: string,
                                value: any,
-                               queryMappingMethod: RestQueryMappingMethod): void {
+                               queryMappingMethod: ResourceQueryMappingMethod): void {
 
     if (value instanceof Date) {
       query[key] = value.toISOString();
@@ -483,7 +483,7 @@ export class Rest {
 
       switch (queryMappingMethod) {
 
-        case RestQueryMappingMethod.Plain:
+        case ResourceQueryMappingMethod.Plain:
 
           if (Array.isArray(value)) {
             query[key] = value.join(',');
@@ -505,7 +505,7 @@ export class Rest {
           }
           break;
 
-        case RestQueryMappingMethod.Bracket:
+        case ResourceQueryMappingMethod.Bracket:
           /// Convert object and arrays to query params
           for (const k in value) {
             if (value.hasOwnProperty(k)) {
@@ -514,7 +514,7 @@ export class Rest {
           }
           break;
 
-        case RestQueryMappingMethod.JQueryParamsBracket:
+        case ResourceQueryMappingMethod.JQueryParamsBracket:
           /// Convert object and arrays to query params according to $.params
           for (const k in value) {
             if (value.hasOwnProperty(k)) {
@@ -535,12 +535,12 @@ export class Rest {
 
   }
 
-  protected $_setRestActionInnerDefaults(options: IRestActionInner) {
+  protected $_setResourceActionInnerDefaults(options: IResourceActionInner) {
     const actionOptions = options.actionOptions;
 
     // Setting default request method
     if (!actionOptions.method) {
-      actionOptions.method = RestRequestMethod.Get;
+      actionOptions.method = ResourceRequestMethod.Get;
     }
 
     const actionAttributes = options.actionAttributes;
@@ -549,12 +549,12 @@ export class Rest {
 
       // Setting default request content type
       if (!actionOptions.requestBodyType) {
-        actionOptions.requestBodyType = RestHelper.getRealTypeOf(actionAttributes.body);
+        actionOptions.requestBodyType = ResourceHelper.getRealTypeOf(actionAttributes.body);
       }
 
 
       // Setting params and query if needed
-      if (actionOptions.requestBodyType === RestRequestBodyType.JSON &&
+      if (actionOptions.requestBodyType === ResourceRequestBodyType.JSON &&
         typeof actionAttributes.body === 'object' && !Array.isArray(actionAttributes.body)) {
 
         if (!actionAttributes.params) {
@@ -569,56 +569,56 @@ export class Rest {
 
     actionAttributes.params = actionAttributes.params || {};
 
-    if (!actionAttributes.query && actionOptions.method === RestRequestMethod.Get) {
+    if (!actionAttributes.query && actionOptions.method === ResourceRequestMethod.Get) {
       actionAttributes.query = actionAttributes.params;
     }
 
-    options.queryMappingMethod = actionOptions.queryMappingMethod || RestGlobalConfig.queryMappingMethod;
+    options.queryMappingMethod = actionOptions.queryMappingMethod || ResourceGlobalConfig.queryMappingMethod;
 
   }
 
-  protected $_setRestActionOptionDefaults(options: IRestActionInner) {
+  protected $_setResourceActionOptionDefaults(options: IResourceActionInner) {
 
     const actionOptions = options.actionOptions;
 
-    if (RestHelper.isNullOrUndefined(actionOptions.filter)) {
+    if (ResourceHelper.isNullOrUndefined(actionOptions.filter)) {
       actionOptions.filter = this.$filter;
     }
 
-    if (RestHelper.isNullOrUndefined(actionOptions.map)) {
+    if (ResourceHelper.isNullOrUndefined(actionOptions.map)) {
       actionOptions.map = this.$map;
     }
 
-    if (RestHelper.isNullOrUndefined(actionOptions.resultFactory)) {
+    if (ResourceHelper.isNullOrUndefined(actionOptions.resultFactory)) {
       actionOptions.resultFactory = this.$resultFactory;
     }
 
-    if (RestHelper.isNullOrUndefined(actionOptions.removeTrailingSlash)) {
-      actionOptions.removeTrailingSlash = RestGlobalConfig.removeTrailingSlash;
+    if (ResourceHelper.isNullOrUndefined(actionOptions.removeTrailingSlash)) {
+      actionOptions.removeTrailingSlash = ResourceGlobalConfig.removeTrailingSlash;
     }
 
-    if (RestHelper.isNullOrUndefined(actionOptions.withCredentials)) {
-      actionOptions.withCredentials = RestGlobalConfig.withCredentials;
+    if (ResourceHelper.isNullOrUndefined(actionOptions.withCredentials)) {
+      actionOptions.withCredentials = ResourceGlobalConfig.withCredentials;
     }
 
-    if (RestHelper.isNullOrUndefined(actionOptions.asPromise)) {
-      actionOptions.asPromise = RestGlobalConfig.asPromise;
+    if (ResourceHelper.isNullOrUndefined(actionOptions.asPromise)) {
+      actionOptions.asPromise = ResourceGlobalConfig.asPromise;
     }
 
-    if (RestHelper.isNullOrUndefined(actionOptions.responseBodyType)) {
-      actionOptions.responseBodyType = RestGlobalConfig.responseBodyType;
+    if (ResourceHelper.isNullOrUndefined(actionOptions.responseBodyType)) {
+      actionOptions.responseBodyType = ResourceGlobalConfig.responseBodyType;
     }
 
-    if (RestHelper.isNullOrUndefined(actionOptions.lean)) {
-      actionOptions.lean = RestGlobalConfig.lean;
+    if (ResourceHelper.isNullOrUndefined(actionOptions.lean)) {
+      actionOptions.lean = ResourceGlobalConfig.lean;
 
-      if (actionOptions.mutateBody && !actionOptions.asPromise && RestHelper.isNullOrUndefined(actionOptions.lean)) {
+      if (actionOptions.mutateBody && !actionOptions.asPromise && ResourceHelper.isNullOrUndefined(actionOptions.lean)) {
         actionOptions.lean = true;
       }
     }
 
-    if (RestHelper.isNullOrUndefined(actionOptions.addTimestamp)) {
-      actionOptions.addTimestamp = RestGlobalConfig.addTimestamp;
+    if (ResourceHelper.isNullOrUndefined(actionOptions.addTimestamp)) {
+      actionOptions.addTimestamp = ResourceGlobalConfig.addTimestamp;
 
       if (actionOptions.addTimestamp && typeof actionOptions.addTimestamp !== 'string') {
         actionOptions.addTimestamp = 'ts';
@@ -626,7 +626,7 @@ export class Rest {
     }
   }
 
-  protected $_setResolvedOptions(options: IRestActionInner): Promise<IRestActionInner> {
+  protected $_setResolvedOptions(options: IResourceActionInner): Promise<IResourceActionInner> {
     return Promise.all([
       this.$getUrl(options.actionOptions),
       this.$getPathPrefix(options.actionOptions),
@@ -645,7 +645,7 @@ export class Rest {
       });
   }
 
-  protected $_createRequestOptions(options: IRestActionInner): IRestActionInner | Promise<IRestActionInner> {
+  protected $_createRequestOptions(options: IResourceActionInner): IResourceActionInner | Promise<IResourceActionInner> {
 
     options.requestOptions = {};
 
@@ -668,7 +668,7 @@ export class Rest {
     return options;
   }
 
-  protected $_canSetInternalData(options: IRestActionInner): boolean {
+  protected $_canSetInternalData(options: IResourceActionInner): boolean {
     return options.returnData && (!options.actionOptions.lean || options.isModel);
   }
 

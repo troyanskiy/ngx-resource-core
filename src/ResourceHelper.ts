@@ -1,6 +1,6 @@
-import { RestRequestBodyType } from './Declarations';
+import { ResourceRequestBodyType } from './Declarations';
 
-export class RestHelper {
+export class ResourceHelper {
 
   static cleanDataFields: string[] = [
     '$resolved',
@@ -9,28 +9,28 @@ export class RestHelper {
     '$rest'
   ];
 
-  static getRealTypeOf(data: any): RestRequestBodyType {
+  static getRealTypeOf(data: any): ResourceRequestBodyType {
     if (!data) {
-      return RestRequestBodyType.NONE;
+      return ResourceRequestBodyType.NONE;
     }
 
     if (data instanceof FormData) {
-      return RestRequestBodyType.FORM_DATA;
+      return ResourceRequestBodyType.FORM_DATA;
     }
 
     if (data instanceof Blob) {
-      return RestRequestBodyType.BLOB;
+      return ResourceRequestBodyType.BLOB;
     }
 
     if (data instanceof ArrayBuffer) {
-      return RestRequestBodyType.ARRAY_BUFFER;
+      return ResourceRequestBodyType.ARRAY_BUFFER;
     }
 
     if (['string', 'number'].indexOf(typeof data) > -1) {
-      return RestRequestBodyType.TEXT;
+      return ResourceRequestBodyType.TEXT;
     }
 
-    return RestRequestBodyType.JSON;
+    return ResourceRequestBodyType.JSON;
   }
 
   static defaults(dst: any, src: any): any {

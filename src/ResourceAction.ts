@@ -1,16 +1,16 @@
-import { Rest } from './Rest';
-import { IRestAction, RestRequestMethod } from './Declarations';
+import { Resource } from './Resource';
+import { IResourceAction, ResourceRequestMethod } from './Declarations';
 
 
-export function RestAction(methodOptions?: IRestAction) {
+export function ResourceAction(methodOptions?: IResourceAction) {
 
   methodOptions = methodOptions || {};
 
   if (methodOptions.method === undefined) {
-    methodOptions.method = RestRequestMethod.Get;
+    methodOptions.method = ResourceRequestMethod.Get;
   }
 
-  return function (target: Rest, propertyKey: string) {
+  return function (target: Resource, propertyKey: string) {
 
     (<any>target)[propertyKey] = function (...args: any[]): any {
 
@@ -42,7 +42,7 @@ export function RestAction(methodOptions?: IRestAction) {
       }
 
       //tslint:disable-next-line:no-invalid-this
-      const actionOptions: IRestAction = {...this.getRestOptions(), ...methodOptions};
+      const actionOptions: IResourceAction = {...this.getResourceOptions(), ...methodOptions};
 
 
       //tslint:disable-next-line:no-invalid-this
