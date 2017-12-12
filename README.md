@@ -25,7 +25,7 @@ export class MyAuthResource extends Resource {
 
   @ResourceAction({
     // IResourceAction
-    method: ResourceRequestMethod.Post
+    method: ResourceRequestMethod.Post,
     path: '/login'
   })
   login: IResourceMethod<{login: string, password: string}, IReturnData>; // will make an post request to /auth/login

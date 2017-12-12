@@ -25,8 +25,8 @@ module.exports = {
     output: {
         path: helpers.root('dist/bundles'),
         publicPath: '/',
-        filename: 'rest-core.umd.js',
-        library: 'rest-core',
+        filename: 'core.umd.js',
+        library: 'ngx-resource-core',
         libraryTarget: 'umd'
     },
 
