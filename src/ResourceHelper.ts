@@ -6,7 +6,7 @@ export class ResourceHelper {
     '$resolved',
     '$promise',
     '$abort',
-    '$rest'
+    '$resource'
   ];
 
   static getRealTypeOf(data: any): ResourceRequestBodyType {

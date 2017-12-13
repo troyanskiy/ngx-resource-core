@@ -265,7 +265,7 @@ export class Resource {
         body = newBody;
 
         // If it's model
-        if (body.$rest) {
+        if (body.$resource) {
           body.$resolved = true;
           body.$promise = options.mainPromise;
           body.$abort = () => true;
@@ -561,7 +561,7 @@ export class Resource {
           actionAttributes.params = actionAttributes.body;
         }
 
-        options.isModel = !!actionAttributes.body.$rest;
+        options.isModel = !!actionAttributes.body.$resource;
 
       }
 

@@ -2,7 +2,7 @@ import { ResourceHelper } from './ResourceHelper';
 
 export abstract class ResourceModel {
 
-  abstract readonly $rest: any = null;
+  abstract readonly $resource: any = null;
 
   $resolved: boolean = true;
   $promise: Promise<any> = null;
@@ -46,13 +46,13 @@ export abstract class ResourceModel {
 
   private $resource_method(methodName: string) {
 
-    if (!this.$rest) {
+    if (!this.$resource) {
       console.error(`Your Resource is not defined`);
 
       return this;
     }
 
-    const restInstance = this.$rest.instance;
+    const restInstance = this.$resource.instance;
 
     if (!restInstance) {
       console.error(`Your Resource is not defined or not created`);
