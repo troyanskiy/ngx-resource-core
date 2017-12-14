@@ -174,7 +174,7 @@ export class GroupResource extends ResourceCRUD<IGroupQuery, Group, Group> {
 
 export class Group extends ResourceModel {
   
-  readonly $rest = GroupResource;
+  readonly $resource = GroupResource;
 
   id: number;
   title: string;
@@ -207,7 +207,7 @@ export class UserResource extends ResourceCRUD<IUserQuery, User, User> {
 
 export class User extends ResourceModel implements IUser {
 
-  readonly $rest = UserResource;
+  readonly $resource = UserResource;
 
   id: number;
   userName: string;
