@@ -310,4 +310,4 @@ Output: `?a[0][b]=10383&a[0][c][]=2&a[0][c][]=3`
 
 ## Developing Resource Handler
 
-Use the [`ResourceHandler`](https://github.com/troyanskiy/ngx-resource-core/blob/master/src/ResourceHandler.ts) abstract class as parent to create your Handler. Checking sources of the class for methods to implement.
+Use the [`ResourceHandler`](https://github.com/troyanskiy/ngx-resource-core/blob/master/src/ResourceHandler.ts) abstract class as parent to create your Handler. Check the sources of the class for the methods to implement.
