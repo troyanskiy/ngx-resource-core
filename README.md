@@ -1,8 +1,8 @@
 [![npm version](https://img.shields.io/npm/v/%40ngx-resource%2Fcore.svg)](https://www.npmjs.com/package/@ngx-resource/core)
 
 # @ngx-resource/core
-Resource Core is an evolution of ngx-resource lib which provides freedom for the developers. Each developer can implement his own request handlers.
-In fact, `@ngx-resource/core` is an abstract common library which uses `ResourceHandler` to make an requests, so it's even possible to use the lib on node.js server side with typescript. Just need to implement `ResourceHandler` for it.
+Resource Core is an evolution of ngx-resource lib which provides flexibility for developers. Each developer can implement their own request handlers to easily customize the behavior.
+In fact, `@ngx-resource/core` is an abstract common library which uses `ResourceHandler` to make requests, so it's even possible to use the lib on node.js server side with typescript. You just need to implement a `ResourceHandler` for it.
 
 All my examples will be based on angalar 4.4.4+
 
@@ -13,7 +13,7 @@ All my examples will be based on angalar 4.4.4+
 * `@ngx-resource/handler-fetch`. Besed on [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API). Not yet created.
 
 
-## Creation of rest class
+## Creation of REST class
 
 ```typescript
 @Injectable()
@@ -37,7 +37,8 @@ export class MyAuthResource extends Resource {
   })
   logout: IResourceMethod<void, void>;
   
-  constructor(restHandler: ResourceHandler) {
+  constructor(
+  Handler: ResourceHandler) {
     super(restHandler);
   }
   
@@ -66,7 +67,7 @@ export class UserResource extends Resource {
   
 }
 
-// Using created rest
+// Using created REST resource
 @Injectable
 export class MyService {
   
@@ -120,7 +121,7 @@ Check for possible body types in the sources of [ResourceRequestBodyType](https:
 
 Is used by `ResourceAction` decorator for methods.
 
-List of params (is all above) plus following:
+List of params (is all of the above) plus the following:
 * `method?: ResourceRequestMethod;` - method of request. *Default `ResourceRequestMethod.Get`*. All possible methods listed in [ResourceRequestMethod](https://github.com/troyanskiy/ngx-resource-core/blob/master/src/Declarations.ts#L131-L139)
 * `expectJsonArray?: boolean;` - if expected to receive an array. The field is used only with `toPromise: false`. *Default `false`*.
 * `resultFactory?: IResourceResultFactory;` - custom method to create result object. *Default: `returns {}`*
@@ -128,12 +129,12 @@ List of params (is all above) plus following:
 * `filter?: IResourceResponseFilter;` - custom data filtering method. *Default: `returns true`*
 
 ### [ResourceGlobalConfig](https://github.com/troyanskiy/ngx-resource-core/blob/master/src/ResourceGlobalConfig.ts)
-Mainly used to set defaults
+Mainly used to set defaults.
 
 
 ## Models
-What is that. It's an object which has build in methods to save, update, delete an model.
-Here is an example of `User` model.
+An object with built-in in methods to save, update, and delete a model.
+Here is an example of a `User` model.
 
 Note: UserResource should be injected at the beginning in order to use static
 model method like `User.get(<id>)`, `User.query()`, `User.remove(<id>)`
@@ -278,10 +279,10 @@ async someMethodToCreateGroupAndUser() {
 
 ## QueryParams Conversion
 
-You can define the way query params are converted
+You can define the way query params are converted.
 Set the global config at the root of your app.
 
-`ResourceGlobalConfig.queryMappingMethod = ResourceQueryMappingMethod.<CONVERTION_STRATEGY>`
+`ResourceGlobalConfig.queryMappingMethod = ResourceQueryMappingMethod.<CONVERSION_STRATEGY>`
 
 ```
 {
@@ -289,10 +290,10 @@ Set the global config at the root of your app.
 }
 ```
 
-With `<CONVERTION_STRATEGY>` being an enumerable within
+With `<CONVERSION_STRATEGY>` being one of the following:
 
 #### Plain (default)
-No convertion at all. 
+No conversion at all
 
 Output: `?a=[Object object]`
 
@@ -309,4 +310,4 @@ Output: `?a[0][b]=10383&a[0][c][]=2&a[0][c][]=3`
 
 ## Developing Resource Handler
 
-Use [`ResourceHandler`](https://github.com/troyanskiy/ngx-resource-core/blob/master/src/ResourceHandler.ts) abstract class as parent to create your Handler. I think it's clear what should it do by checking sources of the class.
+Use the [`ResourceHandler`](https://github.com/troyanskiy/ngx-resource-core/blob/master/src/ResourceHandler.ts) abstract class as parent to create your Handler. Check the sources of the class for the methods to implement.
