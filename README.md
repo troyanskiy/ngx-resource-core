@@ -13,7 +13,7 @@ All my examples will be based on angalar 4.4.4+
 * `@ngx-resource/handler-fetch`. Besed on [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API). Not yet created.
 
 
-## Creation of REST class
+## Creation of Resource class
 
 ```typescript
 @Injectable()
@@ -37,9 +37,8 @@ export class MyAuthResource extends Resource {
   })
   logout: IResourceMethod<void, void>;
   
-  constructor(
-  Handler: ResourceHandler) {
-    super(restHandler);
+  constructor(handler: ResourceHandler) {
+    super(handler);
   }
   
 }
@@ -67,7 +66,7 @@ export class UserResource extends Resource {
   
 }
 
-// Using created REST resource
+// Using created Resource
 @Injectable
 export class MyService {
   
