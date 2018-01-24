@@ -1,3 +1,13 @@
+## 5.1.0
+
+### Improvement
+
+* Added static methods `ResourceModel` in order to not inject resources (need to inject once to create instance into
+your `AppComponent` (first loaded component)
+  * `get(id: string): Promise<any>`
+  * `query(query?: any): Promise<any[]>`
+  * `remove(id: string): Promise<void>`
+
 ## 5.0.0
 
 ### Breaking changes

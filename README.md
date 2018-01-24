@@ -135,6 +135,9 @@ Mainly used to set defaults
 What is that. It's an object which has build in methods to save, update, delete an model.
 Here is an example of `User` model.
 
+Note: UserResource should be injected at the beginning in order to use static
+model method like `User.get(<id>)`, `User.query()`, `User.remove(<id>)`
+
 ```typescript
 
 export interface IPaginationQuery {
@@ -258,6 +261,15 @@ async someMethodToCreateGroupAndUser() {
   
   // Saving the user
   await user.$save();
+  
+  
+  // Query data from server
+  
+  const user1 = await this.userResource.get('1');
+  
+  // or
+  
+  const user2: User = await User.get('id');
   
 }
 
