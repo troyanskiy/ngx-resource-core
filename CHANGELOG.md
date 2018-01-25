@@ -1,3 +1,16 @@
+## 5.2.0
+
+### Improvement
+
+* Added static fields to `ResourceModel` in order to define custom resource method names
+``` typescript
+  protected static methodQuery: string = 'query';
+  protected static methodGet: string = 'get';
+  protected static methodCreate: string = 'create';
+  protected static methodUpdate: string = 'update';
+  protected static methodRemove: string = 'remove';
+```
+  
 ## 5.1.0
 
 ### Improvement

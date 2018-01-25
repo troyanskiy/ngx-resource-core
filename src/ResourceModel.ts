@@ -5,19 +5,25 @@ export abstract class ResourceModel {
 
   static resourceInstance: ResourceCRUD<any, any, any> = null;
 
+  protected static methodQuery: string = 'query';
+  protected static methodGet: string = 'get';
+  protected static methodCreate: string = 'create';
+  protected static methodUpdate: string = 'update';
+  protected static methodRemove: string = 'remove';
+
   static get(id: string): Promise<any> {
-    return this.getInstance().get({id});
+    return this.getInstance()[this.methodGet]({id});
   }
 
-  static query(query?: any): Promise<any[]> {
-    return this.getInstance().query(query);
+  static query(query?: any): Promise<any> {
+    return this.getInstance()[this.methodQuery](query);
   }
 
   static remove(id: string): Promise<void> {
-    return this.getInstance().remove({id});
+    return this.getInstance()[this.methodRemove]({id});
   }
 
-  private static getInstance(): ResourceCRUD<any, any, any> {
+  private static getInstance(): any {
     if (!this.resourceInstance) {
 
       const model: ResourceModel = (new (this as any)());
@@ -42,6 +48,7 @@ export abstract class ResourceModel {
   $promise: Promise<any> = null;
   $abort: () => void;
 
+
   public $setData(data: any) {
     Object.assign(this, data);
 
@@ -59,15 +66,15 @@ export abstract class ResourceModel {
   }
 
   public $create() {
-    return this.$resource_method('create');
+    return this.$resource_method((this.constructor as any).methodCreate);
   }
 
   public $update() {
-    return this.$resource_method('update');
+    return this.$resource_method((this.constructor as any).methodUpdate);
   }
 
   public $remove() {
-    return this.$resource_method('remove');
+    return this.$resource_method((this.constructor as any).methodRemove);
   }
 
   public toJSON(): any {
