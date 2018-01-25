@@ -11,7 +11,7 @@ export abstract class ResourceModel {
   protected static methodUpdate: string = 'update';
   protected static methodRemove: string = 'remove';
 
-  static get(id: string): Promise<any> {
+  static get(id: string | number): Promise<any> {
     return this.getInstance()[this.methodGet]({id});
   }
 
@@ -19,7 +19,7 @@ export abstract class ResourceModel {
     return this.getInstance()[this.methodQuery](query);
   }
 
-  static remove(id: string): Promise<void> {
+  static remove(id: string | number): Promise<void> {
     return this.getInstance()[this.methodRemove]({id});
   }
 
