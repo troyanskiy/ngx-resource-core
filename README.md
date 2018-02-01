@@ -4,7 +4,7 @@
 Resource Core is an evolution of ngx-resource lib which provides flexibility for developers. Each developer can implement their own request handlers to easily customize the behavior.
 In fact, `@ngx-resource/core` is an abstract common library which uses `ResourceHandler` to make requests, so it's even possible to use the lib on node.js server side with typescript. You just need to implement a `ResourceHandler` for it.
 
-All my examples will be based on angalar 4.4.4+
+All my examples will be based on angular 4.4.4+
 
 ### Known ResourceHandlers
 * [`@ngx-resource/handler-ngx-http`](https://github.com/troyanskiy/ngx-resource-handler-ngx-http). Based on `HttpClient` from `@angular/common/http`. Includes `ResourceModule.forRoot`.
