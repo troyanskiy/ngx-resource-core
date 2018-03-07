@@ -17,6 +17,7 @@ export interface IResourceParams extends IResourceParamsBase {
   lean?: boolean;
   mutateBody?: boolean;
   asPromise?: boolean;
+  keepEmptyBody?: boolean;
   requestBodyType?: ResourceRequestBodyType;
   responseBodyType?: ResourceResponseBodyType;
   queryMappingMethod?: ResourceQueryMappingMethod;

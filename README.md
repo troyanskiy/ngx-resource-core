@@ -112,6 +112,7 @@ List of params:
 * `lean?: boolean;` - do no add `$` properties on result. Used only with `toPromise: false` *default `false`*
 * `mutateBody?: boolean;` - if need to mutate provided body with response body. *default `false`*
 * `asPromise?: boolean;` - if method should return promise or object, which will be fullfilled after receiving response. *default `true`*
+* `keepEmptyBody?: boolean;` - if need to keep empty body object `{}`
 * `requestBodyType?: ResourceRequestBodyType;` - request body type. *default: will be detected automatically*.
 Check for possible body types in the sources of [ResourceRequestBodyType](https://github.com/troyanskiy/ngx-resource-core/blob/master/src/Declarations.ts#L114-L122). Type detection algorithm [check here](https://github.com/troyanskiy/ngx-resource-core/blob/master/src/ResourceHelper.ts#L12-L34).
 * `responseBodyType?: ResourceResponseBodyType;` - response body type. *default: `ResourceResponseBodyType.JSON`* Possible body type can be checked here [ResourceResponseBodyType](https://github.com/troyanskiy/ngx-resource-core/blob/master/src/Declarations.ts#L124-L129).

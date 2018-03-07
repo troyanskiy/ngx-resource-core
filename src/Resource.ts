@@ -440,6 +440,11 @@ export class Resource {
       body = newBody;
     }
 
+
+    if (typeof body === 'object' && Object.keys(body).length === 0) {
+      return;
+    }
+
     options.requestOptions.body = body;
 
   }

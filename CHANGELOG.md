@@ -1,3 +1,9 @@
+## 5.2.2
+
+### Bugs fixed
+
+* Remove body from DELETE requests #20
+
 ## 5.2.0
 
 ### Improvement
