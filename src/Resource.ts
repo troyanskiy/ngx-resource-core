@@ -451,9 +451,9 @@ export class Resource {
 
   protected $setRequestOptionsQuery(options: IResourceActionInner): void {
 
-    const oq = {...options.actionAttributes.query};
+    let oq = options.actionAttributes.query || {};
     if (options.resolvedOptions.query) {
-      Object.assign(oq, options.resolvedOptions.query);
+      oq = {...options.resolvedOptions.query, ...oq};
     }
 
     if (oq) {
