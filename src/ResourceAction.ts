@@ -14,32 +14,15 @@ export function ResourceAction(methodOptions?: IResourceAction) {
 
     (<any>target)[propertyKey] = function (...args: any[]): any {
 
-      let body: any = null;
-      let query: any = null;
-      let params: any = null;
-      let onSuccess: any = null;
-      let onError: any = null;
+      const callbacks: any = args.filter((arg: any) => typeof arg === 'function');
+      const data: any = args.filter((arg: any)  => typeof arg !== 'function');
 
-      for (let i = 0; i < args.length; i++) {
-        const arg = args[i];
+      const body: any = data[0];
+      const query: any = data[1];
+      const params: any = data[2];
+      const onSuccess: any = callbacks[0];
+      const onError: any = callbacks[1];
 
-        if (typeof arg === 'function') {
-          if (onSuccess) {
-            onError = arg;
-          } else {
-            onSuccess = arg;
-          }
-        } else {
-          if (!body) {
-            body = arg;
-          } else if (!query) {
-            query = arg;
-          } else {
-            params = arg;
-          }
-        }
-
-      }
 
       //tslint:disable-next-line:no-invalid-this
       const actionOptions: IResourceAction = {...this.getResourceOptions(), ...methodOptions};
