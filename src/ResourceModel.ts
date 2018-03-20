@@ -56,12 +56,12 @@ export abstract class ResourceModel {
     return this;
   }
 
-  public $save() {
+  public $save(query?: any, params?: any) {
 
     if (this.isNew()) {
-      return this.$create();
+      return this.$create(query, params);
     } else {
-      return this.$update();
+      return this.$update(query, params);
     }
 
   }
