@@ -1,5 +1,6 @@
 import { ResourceCRUD } from './ResourceCommon/ResourceCRUD';
 import { ResourceHelper } from './ResourceHelper';
+import { IResourceMethod } from './Declarations';
 
 export abstract class ResourceModel {
 
@@ -66,15 +67,15 @@ export abstract class ResourceModel {
   }
 
   public $create() {
-    return this.$resource_method((this.constructor as any).methodCreate);
+    return this.$executeResourceMethod((this.constructor as any).methodCreate);
   }
 
   public $update() {
-    return this.$resource_method((this.constructor as any).methodUpdate);
+    return this.$executeResourceMethod((this.constructor as any).methodUpdate);
   }
 
   public $remove() {
-    return this.$resource_method((this.constructor as any).methodRemove);
+    return this.$executeResourceMethod((this.constructor as any).methodRemove);
   }
 
   public toJSON(): any {
@@ -85,12 +86,12 @@ export abstract class ResourceModel {
     return !(<any>this)['id'];
   }
 
-  private $resource_method(methodName: string) {
+  protected $getResourceMethod(methodName: string): IResourceMethod<any, this> {
 
     if (!this.$resource) {
       console.error(`Your Resource is not defined`);
 
-      return this;
+      return null;
     }
 
     const restInstance = this.$resource.instance;
@@ -98,16 +99,26 @@ export abstract class ResourceModel {
     if (!restInstance) {
       console.error(`Your Resource is not defined or not created`);
 
-      return this;
+      return null;
     }
 
     if (!restInstance[methodName]) {
       console.error(`Your Resource has no implemented ${methodName} method.`);
 
-      return this;
+      return null;
     }
 
-    restInstance[methodName](this);
+    return restInstance[methodName];
+
+  }
+
+  protected $executeResourceMethod(methodName: string) {
+
+    const method = this.$getResourceMethod(methodName);
+
+    if (method) {
+      method(this);
+    }
 
     return this;
   }
