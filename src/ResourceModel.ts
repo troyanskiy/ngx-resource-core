@@ -1,6 +1,5 @@
 import { ResourceCRUD } from './ResourceCommon/ResourceCRUD';
 import { ResourceHelper } from './ResourceHelper';
-import { IResourceMethod } from './Declarations';
 
 export abstract class ResourceModel {
 
@@ -86,7 +85,7 @@ export abstract class ResourceModel {
     return !(<any>this)['id'];
   }
 
-  protected $getResourceMethod(methodName: string): IResourceMethod<any, this> {
+  protected $getResourceWithMethodCheck(methodName: string): any {
 
     if (!this.$resource) {
       console.error(`Your Resource is not defined`);
@@ -108,16 +107,16 @@ export abstract class ResourceModel {
       return null;
     }
 
-    return restInstance[methodName];
+    return restInstance;
 
   }
 
   protected $executeResourceMethod(methodName: string, query?: any, params?: any) {
 
-    const method = this.$getResourceMethod(methodName);
+    const resource = this.$getResourceWithMethodCheck(methodName);
 
-    if (method) {
-      method(this, query, params);
+    if (resource) {
+      resource[methodName](this, query, params);
     }
 
     return this;
