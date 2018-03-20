@@ -66,16 +66,16 @@ export abstract class ResourceModel {
 
   }
 
-  public $create() {
-    return this.$executeResourceMethod((this.constructor as any).methodCreate);
+  public $create(query?: any, params?: any) {
+    return this.$executeResourceMethod((this.constructor as any).methodCreate, query, params);
   }
 
-  public $update() {
-    return this.$executeResourceMethod((this.constructor as any).methodUpdate);
+  public $update(query?: any, params?: any) {
+    return this.$executeResourceMethod((this.constructor as any).methodUpdate, query, params);
   }
 
-  public $remove() {
-    return this.$executeResourceMethod((this.constructor as any).methodRemove);
+  public $remove(query?: any, params?: any) {
+    return this.$executeResourceMethod((this.constructor as any).methodRemove, query, params);
   }
 
   public toJSON(): any {
@@ -112,12 +112,12 @@ export abstract class ResourceModel {
 
   }
 
-  protected $executeResourceMethod(methodName: string) {
+  protected $executeResourceMethod(methodName: string, query?: any, params?: any) {
 
     const method = this.$getResourceMethod(methodName);
 
     if (method) {
-      method(this);
+      method(this, query, params);
     }
 
     return this;
