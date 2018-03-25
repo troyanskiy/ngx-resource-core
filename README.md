@@ -229,7 +229,7 @@ export class User extends ResourceModel implements IUser {
   }
   
   $setData(data: IUser): this {
-    Object.assign(data);
+    Object.assign(this, data);
     this.fullName = `${this.firstName} ${this.lastName}`;
     return this;
   }
