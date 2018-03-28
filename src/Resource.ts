@@ -441,7 +441,7 @@ export class Resource {
     }
 
 
-    if (typeof body === 'object' && Object.keys(body).length === 0) {
+    if (typeof body === 'object' && Object.keys(body).length === 0 && !options.actionOptions.keepEmptyBody) {
       return;
     }
 
