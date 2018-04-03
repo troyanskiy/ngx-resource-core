@@ -9,17 +9,38 @@ export class ResourceHelper {
     '$resource'
   ];
 
+
+
+  private static isBrowser: boolean = null;
+
+  static isRunningInBrowser(): boolean {
+
+    if (this.isBrowser !== null) {
+      return this.isBrowser;
+    }
+
+    try {
+      this.isBrowser = !!window;
+    } catch (e) {
+      this.isBrowser = false;
+    }
+
+    return this.isBrowser;
+  }
+
   static getRealTypeOf(data: any): ResourceRequestBodyType {
     if (!data) {
       return ResourceRequestBodyType.NONE;
     }
 
-    if (data instanceof FormData) {
-      return ResourceRequestBodyType.FORM_DATA;
-    }
+    if (this.isRunningInBrowser()) {
+      if (data instanceof FormData) {
+        return ResourceRequestBodyType.FORM_DATA;
+      }
 
-    if (data instanceof Blob) {
-      return ResourceRequestBodyType.BLOB;
+      if (data instanceof Blob) {
+        return ResourceRequestBodyType.BLOB;
+      }
     }
 
     if (data instanceof ArrayBuffer) {

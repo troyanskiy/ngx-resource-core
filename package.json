@@ -1,6 +1,6 @@
 {
   "name": "@ngx-resource/core",
-  "version": "5.2.10",
+  "version": "5.2.11",
   "description": "Core of resource library",
   "scripts": {
     "clean": "rimraf dist",
