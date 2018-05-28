@@ -15,6 +15,7 @@ export class ResourceGlobalConfig {
   static lean: boolean = null;
   static asPromise: boolean = true;
   // static toObservable: boolean = null;
+  static asResourceResponse: boolean = false;
   static responseBodyType: ResourceResponseBodyType = ResourceResponseBodyType.Json;
 
 

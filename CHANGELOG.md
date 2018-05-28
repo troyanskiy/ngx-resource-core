@@ -1,3 +1,16 @@
+## 5.3.0
+
+### Improvement
+
+* Implemented new ResourceAction flag `asResourceResponse` which will
+make reshource method to return IResourceResponse object instead of just body.
+
+  * Interfaces for auto complition
+    * `IResourceMethodStrictFull<IB, IQ, IP, O>` 
+    * `IResourceMethodFull<IB, O>`
+    * `IResourceMethodResultStrictFull<IB, IQ, IP, O>`
+    * `IResourceMethodResultFull<IB, O>`
+
 ## 5.2.2
 
 ### Bugs fixed

@@ -282,6 +282,11 @@ export class Resource {
       options.returnData.$resolved = true;
     }
 
+    if (options.actionOptions.asResourceResponse) {
+      resp.body = body;
+      body = resp;
+    }
+
     if (options.actionAttributes.onSuccess) {
       options.actionAttributes.onSuccess(body);
     }
@@ -611,6 +616,10 @@ export class Resource {
 
     if (ResourceHelper.isNullOrUndefined(actionOptions.asPromise)) {
       actionOptions.asPromise = ResourceGlobalConfig.asPromise;
+    }
+
+    if (ResourceHelper.isNullOrUndefined(actionOptions.asResourceResponse)) {
+      actionOptions.asResourceResponse = ResourceGlobalConfig.asResourceResponse;
     }
 
     if (ResourceHelper.isNullOrUndefined(actionOptions.responseBodyType)) {

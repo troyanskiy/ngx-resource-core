@@ -1,4 +1,3 @@
-
 export interface IResourceParamsBase {
   url?: string;
   pathPrefix?: string;
@@ -21,6 +20,8 @@ export interface IResourceParams extends IResourceParamsBase {
   requestBodyType?: ResourceRequestBodyType;
   responseBodyType?: ResourceResponseBodyType;
   queryMappingMethod?: ResourceQueryMappingMethod;
+  asResourceResponse?: boolean;
+
   [prop: string]: any;
 }
 
@@ -48,7 +49,9 @@ export interface IResourceActionAttributes {
   body: any;
   query: any;
   params: any;
+
   onSuccess(data: any): any;
+
   onError(data: any): any;
 }
 
@@ -59,7 +62,7 @@ export interface IResourceActionInner {
 
   queryMappingMethod?: ResourceQueryMappingMethod;
 
-  usedInPath?: {[key: string]: boolean};
+  usedInPath?: { [key: string]: boolean };
   mainPromise?: Promise<any>;
   isModel?: boolean;
 
@@ -74,66 +77,87 @@ export interface IResourceRequest {
   url?: string;
   withCredentials?: boolean;
   body?: any;
-  query?: {[prop: string]: string};
+  query?: { [prop: string]: string };
   responseBodyType?: ResourceResponseBodyType;
   requestBodyType?: ResourceRequestBodyType;
 }
 
 export interface IResourceHandlerResponse {
   promise: Promise<IResourceResponse>;
+
   abort?(): void;
 }
 
-export interface IResourceResponse {
+export interface IResourceResponse<B = any> {
   status: number;
   headers?: any;
-  body?: any;
+  body?: B;
 }
 
-export interface IResourceMethodStrict<IB, IQ, IP, O> {
+export interface IResourceMethodStrictBase<IB, IQ, IP, O, R> {
   (body: IB,
    query: IQ,
    params: IP,
    onSuccess?: (data: O) => any,
-   onError?: (err: IResourceResponse) => any): Promise<O>;
+   onError?: (err: IResourceResponse) => any): R;
 
   (body: IB,
    query: IQ,
    onSuccess?: (data: O) => any,
-   onError?: (err: IResourceResponse) => any): Promise<O>;
+   onError?: (err: IResourceResponse) => any): R;
 
   (body: IB,
    onSuccess?: (data: O) => any,
-   onError?: (err: IResourceResponse) => any): Promise<O>;
+   onError?: (err: IResourceResponse) => any): R;
 
   (onSuccess?: (data: O) => any,
-   onError?: (err: IResourceResponse) => any): Promise<O>;
-
+   onError?: (err: IResourceResponse) => any): R;
 }
 
-export interface IResourceMethodResultStrict<IB, IQ, IP, O> {
-  (body: IB,
-   query: IQ,
-   params: IP,
-   onSuccess?: (data: ResourceResult<O>) => any,
-   onError?: (err: IResourceResponse) => any): ResourceResult<O>;
-
-  (body: IB,
-   query: IQ,
-   onSuccess?: (data: ResourceResult<O>) => any,
-   onError?: (err: IResourceResponse) => any): ResourceResult<O>;
-
-  (body: IB,
-   onSuccess?: (data: ResourceResult<O>) => any,
-   onError?: (err: IResourceResponse) => any): ResourceResult<O>;
-
-  (onSuccess?: (data: ResourceResult<O>) => any,
-   onError?: (err: IResourceResponse) => any): ResourceResult<O>;
+export interface IResourceMethodBase<IB, O, R>
+  extends IResourceMethodStrictBase<IB, any, any, O, R> {
 }
 
-export interface IResourceMethodResult<IB, O> extends IResourceMethodResultStrict<IB, any, any, O> {}
 
-export interface IResourceMethod<IB, O> extends IResourceMethodStrict<IB, any, any, O> {}
+
+export interface IResourceMethodStrict<IB, IQ, IP, O>
+  extends IResourceMethodStrictBase<IB, IQ, IP, O, Promise<O>> {
+}
+
+export interface IResourceMethod<IB, O>
+  extends IResourceMethodBase<IB, O, Promise<O>> {
+}
+
+
+export interface IResourceMethodResultStrict<IB, IQ, IP, O>
+  extends IResourceMethodStrictBase<IB, IQ, IP, O, ResourceResult<O>> {
+}
+
+export interface IResourceMethodResult<IB, O>
+  extends IResourceMethodBase<IB, O, ResourceResult<O>> {
+}
+
+
+
+// As IResourceResponse
+
+export interface IResourceMethodStrictFull<IB, IQ, IP, O>
+  extends IResourceMethodStrictBase<IB, IQ, IP, O, Promise<IResourceResponse<O>>> {
+}
+
+export interface IResourceMethodFull<IB, O>
+  extends IResourceMethodBase<IB, O, Promise<IResourceResponse<O>>> {
+}
+
+
+export interface IResourceMethodResultStrictFull<IB, IQ, IP, O>
+  extends IResourceMethodStrictBase<IB, IQ, IP, O, ResourceResult<IResourceResponse<O>>> {
+}
+
+export interface IResourceMethodResultFull<IB, O>
+  extends IResourceMethodBase<IB, O, ResourceResult<IResourceResponse<O>>> {
+}
+
 
 
 export type ResourceResult<R extends {}> = R & {
