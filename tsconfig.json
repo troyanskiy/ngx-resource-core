@@ -8,6 +8,7 @@
     "declaration": true,
     "moduleResolution": "node",
     "noUnusedLocals": true,
+    "typeRoots": ["node_modules/@types"],
     "types": ["node"],
     "lib": ["es2015", "dom"],
     "outDir": "dist"
