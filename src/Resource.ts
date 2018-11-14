@@ -454,9 +454,14 @@ export class Resource {
         body = newBody;
       }
 
-      if (typeof body === 'object' && Object.keys(body).length === 0 && !options.actionOptions.keepEmptyBody) {
-        return;
+
+      if ((options.actionOptions.requestBodyType === ResourceRequestBodyType.NONE ||
+        (options.actionOptions.requestBodyType === ResourceRequestBodyType.JSON &&
+        typeof body === 'object' && Object.keys(body).length === 0)
+    ) && !options.actionOptions.keepEmptyBody){
+      return;
       }
+
     }
 
     options.requestOptions.body = body;
