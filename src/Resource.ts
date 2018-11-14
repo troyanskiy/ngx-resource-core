@@ -404,37 +404,37 @@ export class Resource {
 
       if (realBodyType === ResourceRequestBodyType.JSON) {
 
-        switch (options.actionOptions.requestBodyType) {
+        if (options.actionOptions.requestBodyType === ResourceRequestBodyType.FORM_DATA) {
 
-          case ResourceRequestBodyType.FORM_DATA:
+          const newBody = new FormData();
 
-            const newBody = new FormData();
+          Object.keys(body).forEach((key: string) => {
 
-            Object.keys(body).forEach((key: string) => {
+            const value = body[key];
 
-              const value = body[key];
+            if (body.hasOwnProperty(key) && typeof value !== 'function') {
 
-              if (body.hasOwnProperty(key) && typeof value !== 'function') {
-                const isArrayOfFiles = value instanceof Array && value.reduce((acc, elem) => acc && elem instanceof File, true);
-                if (isArrayOfFiles) {
-                  value.forEach((f: File, index: number) => {
-                    newBody.append(`${key}[${index}]`, f, (f as File).name);
-                  });
-                } else if (value instanceof File) {
-                  newBody.append(key, value, (value as File).name);
-                } else if (!options.actionOptions.rootNode) {
-                  newBody.append(key, value);
-                }
+              const isArrayOfFiles = value instanceof Array && value.reduce((acc, elem) => acc && elem instanceof File, true);
+
+              if (isArrayOfFiles) {
+                value.forEach((f: File, index: number) => {
+                  newBody.append(`${key}[${index}]`, f, (f as File).name);
+                });
+              } else if (value instanceof File) {
+                newBody.append(key, value, (value as File).name);
+              } else if (!options.actionOptions.rootNode) {
+                newBody.append(key, value);
               }
-
-            });
-
-            if (options.actionOptions.rootNode) {
-              newBody.append(options.actionOptions.rootNode, JSON.stringify(body));
             }
 
-            body = newBody;
-            bodyOk = true;
+          });
+
+          if (options.actionOptions.rootNode) {
+            newBody.append(options.actionOptions.rootNode, JSON.stringify(body));
+          }
+
+          body = newBody;
+          bodyOk = true;
 
         }
 
@@ -458,7 +458,7 @@ export class Resource {
       if ((options.actionOptions.requestBodyType === ResourceRequestBodyType.NONE ||
         (options.actionOptions.requestBodyType === ResourceRequestBodyType.JSON &&
         typeof body === 'object' && Object.keys(body).length === 0)
-    ) && !options.actionOptions.keepEmptyBody){
+    ) && !options.actionOptions.keepEmptyBody) {
       return;
       }
 
