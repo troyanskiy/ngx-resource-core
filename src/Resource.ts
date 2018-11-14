@@ -424,7 +424,7 @@ export class Resource {
               }
 
             });
-
+            body = newBody;
             bodyOk = true;
 
         }
@@ -446,7 +446,10 @@ export class Resource {
     }
 
 
-    if (typeof body === 'object' && Object.keys(body).length === 0 && !options.actionOptions.keepEmptyBody) {
+    if ((options.actionOptions.requestBodyType === ResourceRequestBodyType.NONE ||
+        (options.actionOptions.requestBodyType === ResourceRequestBodyType.JSON &&
+        typeof body === 'object' && Object.keys(body).length === 0)
+    ) && !options.actionOptions.keepEmptyBody){
       return;
     }
 
