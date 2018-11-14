@@ -415,15 +415,24 @@ export class Resource {
               const value = body[key];
 
               if (body.hasOwnProperty(key) && typeof value !== 'function') {
-                let fileName: string;
-                if (value instanceof File) {
-                  fileName = (value as File).name;
+                const isArrayOfFiles = value instanceof Array && value.reduce((acc, elem) => acc && elem instanceof File, true);
+                if (isArrayOfFiles) {
+                  value.forEach((f: File, index: number) => {
+                    newBody.append(`${key}[${index}]`, f, (f as File).name);
+                  });
+                } else if (value instanceof File) {
+                  newBody.append(key, value, (value as File).name);
+                } else if (!options.actionOptions.rootNode) {
+                  newBody.append(key, value);
                 }
-
-                newBody.append(key, value, fileName);
               }
 
             });
+
+            if (options.actionOptions.rootNode) {
+              newBody.append(options.actionOptions.rootNode, JSON.stringify(body));
+            }
+
             body = newBody;
             bodyOk = true;
 
@@ -437,20 +446,22 @@ export class Resource {
       throw new Error('Can not convert body');
     }
 
+    if (!(body instanceof FormData)) {
+      // Add root node if needed
+      if (options.actionOptions.rootNode) {
+        const newBody: any = {};
+        newBody[options.actionOptions.rootNode] = body;
+        body = newBody;
+      }
 
-    // Add root node if needed
-    if (options.actionOptions.rootNode) {
-      const newBody: any = {};
-      newBody[options.actionOptions.rootNode] = body;
-      body = newBody;
-    }
 
-
-    if ((options.actionOptions.requestBodyType === ResourceRequestBodyType.NONE ||
+      if ((options.actionOptions.requestBodyType === ResourceRequestBodyType.NONE ||
         (options.actionOptions.requestBodyType === ResourceRequestBodyType.JSON &&
         typeof body === 'object' && Object.keys(body).length === 0)
     ) && !options.actionOptions.keepEmptyBody){
       return;
+      }
+
     }
 
     options.requestOptions.body = body;
