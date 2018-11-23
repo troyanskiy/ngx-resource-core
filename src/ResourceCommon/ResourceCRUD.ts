@@ -3,10 +3,10 @@ import { ResourceAction } from '../ResourceAction';
 import { IResourceMethod, ResourceRequestMethod } from '../Declarations';
 
 
-export abstract class ResourceCRUD<TQuery, TShort, TFull> extends Resource {
+export abstract class ResourceCRUD<TQuery, TShort, TFull, TQueryResult = TShort[]> extends Resource {
 
   @ResourceAction()
-  query: IResourceMethod<TQuery, TShort[]>;
+  query: IResourceMethod<TQuery, TQueryResult>;
 
   @ResourceAction({
     path: '/{!id}'

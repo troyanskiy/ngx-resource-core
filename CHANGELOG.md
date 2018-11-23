@@ -1,3 +1,10 @@
+## 5.4.1
+
+### Improvement
+
+* Added fourth optional generic type for query result
+`ResourceCRUD<TQuery, TShort, TFull, TQueryResult = TShort[]>`
+
 ## 5.4.0
 
 ### Improvement
