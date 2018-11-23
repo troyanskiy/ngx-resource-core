@@ -1,3 +1,9 @@
+## 5.4.0
+
+### Improvement
+
+* Added `patch` method to CRUD resource
+
 ## 5.3.0
 
 ### Improvement

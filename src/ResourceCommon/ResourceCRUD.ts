@@ -30,6 +30,12 @@ export abstract class ResourceCRUD<TQuery, TShort, TFull> extends Resource {
   })
   remove: IResourceMethod<{ id: any }, any>;
 
+  @ResourceAction({
+    method: ResourceRequestMethod.Patch,
+    path: '/{!id}'
+  })
+  patch: IResourceMethod<{ id: any } & Partial<TFull>, TFull>;
+
   // Alias to save
   create(data: TFull, callback?: (res: TFull) => any): Promise<TFull> {
     return this.save(data, callback);
