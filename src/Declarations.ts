@@ -197,5 +197,7 @@ export enum ResourceRequestMethod {
 export enum ResourceQueryMappingMethod {
   Plain = 1,
   Bracket = 2,
-  JQueryParamsBracket = 3
+  JQueryParamsBracket = 3,
+
+  None = 99
 }

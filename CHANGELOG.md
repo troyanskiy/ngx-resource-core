@@ -1,3 +1,10 @@
+## 5.4.2
+
+### Improvement
+
+* Added new query mapping method `ResourceQueryMappingMethod.None` in order
+to have query params as is (not converted)
+
 ## 5.4.1
 
 ### Improvement

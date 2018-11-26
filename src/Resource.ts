@@ -530,7 +530,8 @@ export class Resource {
             query[key] = value;
 
           }
-          break;
+
+          return;
 
         case ResourceQueryMappingMethod.Bracket:
           /// Convert object and arrays to query params
@@ -539,7 +540,8 @@ export class Resource {
               this.$appendQueryParams(query, `${key}[${k}]`, value[k], queryMappingMethod);
             }
           }
-          break;
+
+          return;
 
         case ResourceQueryMappingMethod.JQueryParamsBracket:
           /// Convert object and arrays to query params according to $.params
@@ -553,9 +555,10 @@ export class Resource {
             }
           }
 
+          return;
+
       }
 
-      return;
     }
 
     query[key] = value;
