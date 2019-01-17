@@ -26,7 +26,7 @@ export abstract class ResourceCRUD<TQuery, TShort, TFull, TQueryResult = TShort[
 
   @ResourceAction({
     method: ResourceRequestMethod.Delete,
-    path: '/{!id}'
+    path: '/{!:id}'
   })
   remove: IResourceMethod<{ id: any }, any>;
 

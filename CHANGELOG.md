@@ -1,3 +1,9 @@
+## 5.4.3
+
+### Bug fix
+
+* Remove `id` from body of delete request
+
 ## 5.4.2
 
 ### Improvement
