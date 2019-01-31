@@ -5,10 +5,10 @@
   "scripts": {
     "tsc": "tsc",
     "webpack": "webpack",
-    "build": "npm run tsc && npm run webpack",
+    "build": "cd ./ && npm install && npm run tsc && npm run webpack",
     "build.full": "npm run build && cpx package.json dist/ && cpx README.md dist/",
     "publish": "npm publish dist --access public",
-    "postinstall": "cd ./ && npm install && npm run tsc"
+    "postinstall": "npm run build"
 
   },
   "keywords": [
