@@ -3,8 +3,12 @@
   "version": "5.4.3",
   "description": "Core of resource library",
   "scripts": {
+    "tsc": "tsc",
+    "webpack": "webpack",
+    "build": "npm run tsc && npm run webpack",
+    "build.full": "npm run build && cpx package.json dist/ && cpx README.md dist/",
     "publish": "npm publish dist --access public",
-    "postinstall" : "npm run tsc && npm run webpack"
+    "postinstall": "npm run build"
   },
   "keywords": [
     "ngx-resource",
