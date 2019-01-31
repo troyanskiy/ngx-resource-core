@@ -3,11 +3,14 @@
   "version": "5.4.3",
   "description": "Core of resource library",
   "scripts": {
+    "clean": "rm -rf dist",
+    "lint": "tslint --config tslint.json --project tsconfig.json --type-check --format stylish",
+    "tsc": "tsc",
+    "webpack": "webpack",
     "build": "npm run clean && npm run lint && npm run tsc && npm run webpack",
     "build.full": "npm run build && cpx package.json dist/ && cpx README.md dist/",
     "publish": "npm publish dist --access public",
-    "preinstall": "npm run build",
-    "postinstall": "mv dist core"
+    "postinstall": "npm run build && mv dist core"
   },
   "keywords": [
     "ngx-resource",
