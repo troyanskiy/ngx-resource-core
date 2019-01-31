@@ -8,7 +8,8 @@
     "build": "npm run tsc && npm run webpack",
     "build.full": "npm run build && cpx package.json dist/ && cpx README.md dist/",
     "publish": "npm publish dist --access public",
-    "postinstall": "npm run build"
+    "postinstall": "cd node_modules/@ngx-resource/core && npm install && npm run build"
+
   },
   "keywords": [
     "ngx-resource",
