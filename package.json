@@ -4,7 +4,7 @@
   "description": "Core of resource library",
   "scripts": {
     "publish": "npm publish dist --access public",
-    "build" : "npm run tsc && npm run webpack"
+    "postinstall" : "npm run tsc && npm run webpack"
   },
   "keywords": [
     "ngx-resource",
