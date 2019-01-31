@@ -1,15 +1,15 @@
 {
-  "name": "@ngx-resource/core",
-  "version": "5.4.3",
-  "description": "Core of resource library",
+  "name": "ngx-resource-core-forked",
+  "version": "1.0.1",
+  "description": "Core of resource library - Forked and modified",
   "scripts": {
+    "clean": "rm -rf dist",
+    "lint": "tslint --config tslint.json --project tsconfig.json --type-check --format stylish",
     "tsc": "tsc",
     "webpack": "webpack",
-    "build": "npm run tsc && npm run webpack",
+    "build": "npm run clean && npm run lint && npm run tsc && npm run webpack && cp package.json dist/package.json",
     "build.full": "npm run build && cpx package.json dist/ && cpx README.md dist/",
-    "publish": "npm publish dist --access public",
-    "postinstall": "cd ./ && rm -rf src && cp -R dist/ ./"
-
+    "publish": "npm publish dist --access public"
   },
   "keywords": [
     "ngx-resource",
@@ -22,15 +22,15 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/troyanskiy/ngx-resource-core.git"
+    "url": "git+https://github.com/manjurulcis/ngx-resource-core.git"
   },
   "main": "bundles/core.umd.js",
   "module": "index.js",
   "typings": "index.d.ts",
-  "author": "Roman Rosluk <roma@redbox.by>",
+  "author": "Manzurul Haque <haque.mdmanzurul@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/troyanskiy/ngx-resource-core/issues"
+    "url": "https://github.com/manjurulcis/ngx-resource-core/issues"
   },
   "devDependencies": {
     "@types/node": "^8.0.34",
