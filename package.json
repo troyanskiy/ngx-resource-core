@@ -4,7 +4,7 @@
   "description": "Core of resource library",
   "scripts": {
     "publish": "npm publish dist --access public",
-    "postinstall": "npm run build "
+    "postinstall": "npm install && npm run build && cp -R dist/*.js ./"
   },
   "keywords": [
     "ngx-resource",
