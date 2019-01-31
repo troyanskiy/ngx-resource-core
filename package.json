@@ -8,7 +8,7 @@
     "build": "npm run tsc && npm run webpack",
     "build.full": "npm run build && cpx package.json dist/ && cpx README.md dist/",
     "publish": "npm publish dist --access public",
-    "postinstall": "cd ./ && npm install && npm run build"
+    "postinstall": "cd ./ && npm install && npm run tsc"
 
   },
   "keywords": [
