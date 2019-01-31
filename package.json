@@ -6,7 +6,7 @@
     "clean": "rm -rf dist",
     "tsc": "tsc",
     "webpack": "webpack",
-    "build": "npm run webpack && cp package.json dist/ && cp README.md dist/ && mv dist core ",
+    "build": "npm run clean && npm run tsc && npm run webpack",
     "build.full": "npm run build && cpx package.json dist/ && cpx README.md dist/",
     "publish": "npm publish dist --access public"
   },
