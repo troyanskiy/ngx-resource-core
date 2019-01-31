@@ -34,11 +34,11 @@ export class ResourceHelper {
     }
 
     if (this.isRunningInBrowser()) {
-      if (data instanceof FormData) {
+      if (FormData && data instanceof FormData) {
         return ResourceRequestBodyType.FORM_DATA;
       }
 
-      if (data instanceof Blob) {
+      if (Blob && data instanceof Blob) {
         return ResourceRequestBodyType.BLOB;
       }
     }
