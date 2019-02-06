@@ -1,3 +1,9 @@
+## 5.4.4
+
+### Bug fix
+
+* Fixes Angular Universal compatibility
+
 ## 5.4.3
 
 ### Bug fix
