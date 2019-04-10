@@ -318,3 +318,96 @@ Output: `?a[0][b]=10383&a[0][c][]=2&a[0][c][]=3`
 ## Developing Resource Handler
 
 Use the [`ResourceHandler`](https://github.com/troyanskiy/ngx-resource-core/blob/master/src/ResourceHandler.ts) abstract class as parent to create your Handler. Check the sources of the class for the methods to implement.
+
+## Unit testing of the Resource with Angular
+
+#### auth.resource.ts
+```typescript
+
+@ResourceParams({
+  pathPrefix: '/api/auth'
+})
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthResource extends Resource {
+
+  @ResourceAction({
+    path: '/profile'
+  })
+  getProfile: IResourceMethod<void, IUserProfile>;
+
+  @ResourceAction({
+    path: '/login',
+    method: ResourceRequestMethod.Post
+  })
+  login: IResourceMethod<{ username: string, password: string }, void>;
+
+
+  constructor(resourceHandler: ResourceHandler) {
+    super(resourceHandler);
+  }
+
+}
+```
+
+#### auth.resource.spec.ts
+```typescript
+
+describe('AuthResource', () => {
+
+  let httpTestingController: HttpTestingController;
+  let authResource: AuthResource;
+
+  beforeEach(() => {
+
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule,
+        ResourceModule.forRoot()
+      ]
+    });
+
+    httpTestingController = TestBed.get(HttpTestingController);
+    authResource = TestBed.get(AuthResource);
+
+
+  });
+
+  afterEach(() => {
+    httpTestingController.verify();
+  });
+
+  it('should be created', () => {
+    expect(authResource).toBeTruthy();
+  });
+
+  it('should call to get profile', (done: DoneFn) => {
+
+    const profileData = {
+      firstName: 'Hello',
+      lastName: 'World',
+      email: 'hello@world.com',
+      language: 'en'
+    } as IUserProfile;
+
+    authResource.getProfile()
+      .then(profile => {
+        expect(profile.lastName).toBe('World');
+      });
+
+    setTimeout(() => {
+      const req = httpTestingController.expectOne('/api/auth/profile');
+
+      expect(req.request.method).toEqual('GET');
+
+      req.flush(profileData);
+
+      done();
+    });
+
+  });
+
+});
+
+```
