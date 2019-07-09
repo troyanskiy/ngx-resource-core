@@ -60,7 +60,7 @@ export class UserResource extends Resource {
   })
   createUser: IResourceMethodStrict<IUser, IUserQuery, IUserPathParams, IUser>;
   
-  @ResoucreAction({
+  @ResourceAction({
     path: '/test/data',
     asResourceResponse: true
   })
