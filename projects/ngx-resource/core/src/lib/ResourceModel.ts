@@ -3,24 +3,40 @@ import { ResourceHelper } from './ResourceHelper';
 
 export abstract class ResourceModel {
 
-  static resourceInstance: ResourceCRUD<any, any, any> = null;
+  static resourceInstance: ResourceCRUD<any, any, any> | null = null;
 
-  protected static methodQuery: string = 'query';
-  protected static methodGet: string = 'get';
-  protected static methodCreate: string = 'create';
-  protected static methodUpdate: string = 'update';
-  protected static methodRemove: string = 'remove';
+  protected static methodQuery = 'query';
+  protected static methodGet = 'get';
+  protected static methodCreate = 'create';
+  protected static methodUpdate = 'update';
+  protected static methodRemove = 'remove';
+
+
+
+  abstract readonly $resource: any = null;
+
+  $resolved = true;
+  $promise: Promise<any> | null = null;
+  $abort: () => void;
+
+  $idField = 'id';
 
   static get(id: string | number): Promise<any> {
-    return this.getInstance()[this.methodGet]({id});
+    const p = this.getInstance()[this.methodGet]({id});
+
+    return p;
   }
 
   static query(query?: any): Promise<any> {
-    return this.getInstance()[this.methodQuery](query);
+    const p = this.getInstance()[this.methodQuery](query);
+
+    return p;
   }
 
   static remove(id: string | number): Promise<void> {
-    return this.getInstance()[this.methodRemove]({id});
+    const p = this.getInstance()[this.methodRemove]({id});
+
+    return p;
   }
 
   private static getInstance(): any {
@@ -41,12 +57,6 @@ export abstract class ResourceModel {
 
     return this.resourceInstance;
   }
-
-  abstract readonly $resource: any = null;
-
-  $resolved: boolean = true;
-  $promise: Promise<any> = null;
-  $abort: () => void;
 
 
   public $setData(data: any) {
@@ -82,7 +92,7 @@ export abstract class ResourceModel {
   }
 
   protected isNew(): boolean {
-    return !(<any>this)['id'];
+    return !(this as any)[this.$idField];
   }
 
   protected $getResourceWithMethodCheck(methodName: string): any {

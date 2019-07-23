@@ -1,3 +1,7 @@
+import { Observable } from 'rxjs';
+
+export type TTypePromiseNull<T = {}> = T | Promise<T> | null;
+
 export interface IResourceParamsBase {
   url?: string;
   pathPrefix?: string;
@@ -16,6 +20,7 @@ export interface IResourceParams extends IResourceParamsBase {
   lean?: boolean;
   mutateBody?: boolean;
   asPromise?: boolean;
+  asObservable?: boolean;
   keepEmptyBody?: boolean;
   requestBodyType?: ResourceRequestBodyType;
   responseBodyType?: ResourceResponseBodyType;
@@ -28,22 +33,16 @@ export interface IResourceParams extends IResourceParamsBase {
 export interface IResourceAction extends IResourceParams {
   method?: ResourceRequestMethod; // get default
   expectJsonArray?: boolean;
-  resultFactory?: IResourceResultFactory;
-  map?: IResourceResponseMap;
-  filter?: IResourceResponseFilter;
+  resultFactory?: TResourceResultFactory;
+  map?: TResourceResponseMap;
+  filter?: TResourceResponseFilter;
 }
 
-export interface IResourceResponseMap {
-  (item: any, options: IResourceActionInner): any;
-}
+export type TResourceResponseMap = (item: any, options: IResourceActionInner) => any;
 
-export interface IResourceResponseFilter {
-  (item: any, options: IResourceActionInner): boolean;
-}
+export type TResourceResponseFilter = (item: any, options: IResourceActionInner) => boolean;
 
-export interface IResourceResultFactory {
-  (item: any, options: IResourceActionInner): any;
-}
+export type TResourceResultFactory = (item: any, options: IResourceActionInner) => any;
 
 export interface IResourceActionAttributes {
   body: any;
@@ -63,7 +62,7 @@ export interface IResourceActionInner {
   queryMappingMethod?: ResourceQueryMappingMethod;
 
   usedInPath?: { [key: string]: boolean };
-  mainPromise?: Promise<any>;
+  mainObservable?: Observable<any>;
   isModel?: boolean;
 
   requestOptions?: IResourceRequest;
@@ -84,6 +83,7 @@ export interface IResourceRequest {
 
 export interface IResourceHandlerResponse {
   promise: Promise<IResourceResponse>;
+  observable: Observable<IResourceResponse>;
 
   abort?(): void;
 }
