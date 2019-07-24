@@ -1,6 +1,9 @@
 [![npm version](https://img.shields.io/npm/v/%40ngx-resource%2Fcore.svg)](https://www.npmjs.com/package/@ngx-resource/core)
 
 # @ngx-resource/core
+
+Repository is moved to https://github.com/troyanskiy/ngx-resource
+
 Resource Core is an evolution of ngx-resource lib which provides flexibility for developers. Each developer can implement their own request handlers to easily customize the behavior.
 In fact, `@ngx-resource/core` is an abstract common library which uses `ResourceHandler` to make requests, so it's even possible to use the lib on node.js server side with typescript. You just need to implement a `ResourceHandler` for it.
 
